@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "168829935170",
+    "project_id": "foodpad-80f70",
+    "storage_bucket": "foodpad-80f70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168829935170:android:beb0ece2ea337aff2657db",
+        "android_client_info": {
+          "package_name": "com.mobdeve.s15.mco.foodpad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168829935170-k0vas3b76kqj273c5nqhu7v257mn8h3s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrUmdVz7HpCMaXm49aJv_ExdMT8TGR9Lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168829935170-k0vas3b76kqj273c5nqhu7v257mn8h3s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
