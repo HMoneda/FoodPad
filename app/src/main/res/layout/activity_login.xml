@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/foodpad_background_dark"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:id="@+id/topRoundIV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/round_shape"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/bottomRoundIV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleX="-1"
+        android:scaleY="-1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/round_shape" />
+
+    <LinearLayout
+        android:id="@+id/loginTextLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topRoundIV">
+
+        <TextView
+            android:id="@+id/logInTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Log in"
+            android:textColor="@color/primary_yellow"
+            android:textSize="36sp" />
+
+        <ImageView
+            android:id="@+id/spaghettiIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            app:srcCompat="@drawable/spaghetti" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/formFieldsLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="16dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/loginTextLL">
+
+        <EditText
+            android:id="@+id/usernameET"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/textfield"
+            android:hint="Username"
+            android:fontFamily="@font/poppins_light"
+            android:textSize="14sp"
+            android:textColorHint="@color/primary_yellow"
+            android:inputType="text"
+            />
+
+        <EditText
+            android:id="@+id/passwordET"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/textfield"
+            android:hint="Password"
+            android:fontFamily="@font/poppins_light"
+            android:textSize="14sp"
+            android:textColorHint="@color/primary_yellow"
+            android:inputType="textPassword"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/formBtnLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingVertical="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/formFieldsLL">
+
+        <Button
+            android:id="@+id/loginAccBtn"
+            android:layout_width="283dp"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Log in"
+            android:textAllCaps="false"
+            android:textSize="18dp"
+            app:backgroundTint="@color/primary_yellow"
+            app:layout_constraintTop_toBottomOf="@+id/passwordET" />
+
+        <Button
+            android:id="@+id/loginWithGoogleBtn"
+            android:layout_width="283dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/poppins_medium"
+            android:drawableLeft="@drawable/google_logo"
+            android:text="Sign in with Google"
+            android:textAllCaps="false"
+            android:textSize="18dp"
+            app:backgroundTint="@color/primary_yellow"
+            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+
+        <TextView
+            android:id="@+id/registerTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:fontFamily="@font/poppins_medium"
+            android:minHeight="48dp"
+            android:text="Don't have an account?"
+            android:textColor="@color/primary_yellow"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
