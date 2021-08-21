@@ -5,14 +5,29 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var auth : FirebaseAuth
+    private lateinit var loginBtn : Button
+    private lateinit var  signUpBtn : Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
+
+        if(auth.currentUser != null){
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         setContentView(R.layout.activity_main)
 
-        val loginBtn : Button = findViewById(R.id.logInBtn)
-        val signUpBtn: Button = findViewById(R.id.signUpBtn)
+        loginBtn  = findViewById(R.id.logInBtn)
+        signUpBtn = findViewById(R.id.signUpBtn)
 
         loginBtn.setOnClickListener {
             Log.d(LogTags.MAIN_ACTIVITY.name, "Login Clicked!")

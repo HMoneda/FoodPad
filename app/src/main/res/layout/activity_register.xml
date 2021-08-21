@@ -27,9 +27,10 @@
         android:id="@+id/loginTextLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:paddingHorizontal="32dp"
         android:paddingVertical="16dp"
-        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topRoundIV">
 
@@ -55,71 +56,74 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:orientation="vertical"
         android:paddingHorizontal="32dp"
         android:paddingVertical="16dp"
-        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginTextLL">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            app:boxBackgroundColor="@color/dark_gray"
-            app:boxStrokeColor="@color/primary_yellow"
-            android:textColorHint="@color/primary_yellow"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
             android:textColor="@color/primary_yellow"
-            >
+            android:textColorHint="@color/primary_yellow"
+            app:boxBackgroundColor="@color/dark_gray"
+            app:boxStrokeColor="@color/primary_yellow">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signupUsernameEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
                 android:hint="Username"
-                android:textColor="@color/primary_yellow"
                 android:inputType="text"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="14sp"
-                />
+                android:textColor="@color/primary_yellow"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            app:boxBackgroundColor="@color/dark_gray"
-            app:boxStrokeColor="@color/primary_yellow"
+            android:textColor="@color/primary_yellow"
             android:textColorHint="@color/primary_yellow"
-            android:textColor="@color/primary_yellow">
+            app:boxBackgroundColor="@color/dark_gray"
+            app:boxStrokeColor="@color/primary_yellow">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signupEmailEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
                 android:hint="E-mail"
-                android:textColor="@color/primary_yellow"
                 android:inputType="textEmailAddress"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="14sp"/>
+                android:textColor="@color/primary_yellow"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-            app:boxBackgroundColor="@color/dark_gray"
-            app:boxStrokeColor="@color/primary_yellow"
+            android:textColor="@color/primary_yellow"
             android:textColorHint="@color/primary_yellow"
-            android:textColor="@color/primary_yellow">
+            app:boxBackgroundColor="@color/dark_gray"
+            app:boxStrokeColor="@color/primary_yellow">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signupPasswordEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:textColor="@color/primary_yellow"
-                android:inputType="textPassword"
                 android:fontFamily="@font/poppins_medium"
-                android:textSize="14sp"/>
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@color/primary_yellow"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
@@ -130,9 +134,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/bottomRoundIV"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/formFieldsLL"
-        app:layout_constraintBottom_toTopOf="@id/bottomRoundIV">
+        app:layout_constraintTop_toBottomOf="@+id/formFieldsLL">
 
         <Button
             android:id="@+id/loginAccBtn"
@@ -147,7 +152,7 @@
             app:layout_constraintTop_toBottomOf="@+id/passwordET" />
 
         <TextView
-            android:id="@+id/registerTV"
+            android:id="@+id/loginTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
