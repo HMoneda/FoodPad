@@ -60,46 +60,67 @@
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/loginTextLL">
 
-        <EditText
-            android:id="@+id/usernameET"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:paddingHorizontal="12dp"
-            android:background="@drawable/textfield_dark"
-            android:hint="Username"
-            android:fontFamily="@font/poppins"
-            android:textSize="14sp"
-            android:textColorHint="@color/primary_yellow"
-            android:inputType="text"
-            />
+            android:layout_height="wrap_content"
 
-        <EditText
-            android:id="@+id/emailET"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="16dp"
-            android:paddingHorizontal="12dp"
-            android:background="@drawable/textfield_dark"
-            android:hint="E-mail"
-            android:fontFamily="@font/poppins"
-            android:textSize="14sp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:boxBackgroundColor="@color/dark_gray"
+            app:boxStrokeColor="@color/primary_yellow"
             android:textColorHint="@color/primary_yellow"
-            android:inputType="textPassword"
-            />
+            android:textColor="@color/primary_yellow"
+            >
 
-        <EditText
-            android:id="@+id/passwordET"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:textColor="@color/primary_yellow"
+                android:inputType="text"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="16dp"
-            android:paddingHorizontal="12dp"
-            android:background="@drawable/textfield_dark"
-            android:hint="Password"
-            android:fontFamily="@font/poppins"
-            android:textSize="14sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:boxBackgroundColor="@color/dark_gray"
+            app:boxStrokeColor="@color/primary_yellow"
             android:textColorHint="@color/primary_yellow"
-            android:inputType="textPassword"
-            />
+            android:textColor="@color/primary_yellow">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="E-mail"
+                android:textColor="@color/primary_yellow"
+                android:inputType="textEmailAddress"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:boxBackgroundColor="@color/dark_gray"
+            app:boxStrokeColor="@color/primary_yellow"
+            android:textColorHint="@color/primary_yellow"
+            android:textColor="@color/primary_yellow">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:textColor="@color/primary_yellow"
+                android:inputType="textPassword"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 

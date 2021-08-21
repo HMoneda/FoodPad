@@ -22,10 +22,12 @@ class LoginActivity : AppCompatActivity() {
 
         val db = Firebase.firestore
         auth = Firebase.auth
-        var usernameEt : EditText = findViewById(R.id.usernameET)
+        /*
+        var usernameEt :  = findViewById(R.id.usernameET)
         var passwordEt : EditText = findViewById(R.id.passwordET)
         var loginAccBtn : Button = findViewById(R.id.loginAccBtn)
         var tempUser = User("sonson_great","Hakdoq1234", "sonson@sample.com")
+         */
 
 //        fun loginUser(){
 //            var username = usernameEt.text.toString()
