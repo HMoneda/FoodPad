@@ -70,13 +70,17 @@ class RegisterActivity : AppCompatActivity() {
                 if(task.isSuccessful){
                     db.collection(FirestoreReferences.USERS_COLLECTION).add(newUser).addOnSuccessListener {
                         Log.d(TAG, "DocumentSnapshot added with ID: ${it.id}")
+                        val i = Intent(this, HomeActivity::class.java)
+                        i.apply {
+                            putExtra(IntentKeys.EMAIL_KEY.name, email)
+                            putExtra(IntentKeys.UID_KEY.name, it.id)
+                        }
+                        startActivity(i)
+                        finish()
                     }.addOnFailureListener{
                         Log.w(LogTags.LOGIN_ACTIVITY.name, "Error Adding Document", it)
                     }
-                    val i = Intent(this, HomeActivity::class.java)
-                    i.putExtra(IntentKeys.EMAIL_KEY.name, email)
-                    startActivity(i)
-                    finish()
+
                 }else{
                     Log.w(TAG, task.exception)
                     if(task.exception is FirebaseAuthUserCollisionException){

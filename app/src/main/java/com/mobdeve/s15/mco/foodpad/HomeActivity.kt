@@ -14,7 +14,6 @@ import kotlin.math.log
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var db : FirebaseFirestore
-    private lateinit var user : User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,17 +66,4 @@ class HomeActivity : AppCompatActivity() {
         frag.commit()
     }
 
-    private fun fetchUserData(){
-        var email = intent.getStringExtra(IntentKeys.EMAIL_KEY.name)
-        var userRef = db.collection(FirestoreReferences.USERS_COLLECTION)
-        userRef
-            .whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
-            .get()
-            .addOnSuccessListener {
-//                val username = it.documents[0].data?.getValue(FirestoreReferences.USERNAME_FIELD).toString()
-//                val bio = it.documents[0].data?.getValue(FirestoreReferences.BIO_FIELD).toString()
-//                val followerCount = it.documents[0].data?.getValue(FirestoreReferences.FOLLOWER_COUNT_FIELD).toString().toInt()
-
-            }
-    }
 }

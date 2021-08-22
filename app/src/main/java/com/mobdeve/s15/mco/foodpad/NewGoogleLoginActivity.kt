@@ -32,6 +32,7 @@ class NewGoogleLoginActivity : AppCompatActivity() {
 
         val accountID = intent.getStringExtra(IntentKeys.ACCOUNT_KEY.name)
         val email = intent.getStringExtra(IntentKeys.EMAIL_KEY.name)
+        val UID = intent.getStringExtra(IntentKeys.UID_KEY.name)
 
         proceedBtn.setOnClickListener {
             val username = usernameEt.text.toString()
@@ -49,7 +50,10 @@ class NewGoogleLoginActivity : AppCompatActivity() {
                             Log.w(TAG, "Error Adding Document", it)
                         }
                         val i = Intent(this, HomeActivity::class.java)
-                        i.putExtra(IntentKeys.EMAIL_KEY.name, email)
+                        i.apply {
+                            putExtra(IntentKeys.EMAIL_KEY.name, email)
+                            putExtra(IntentKeys.UID_KEY.name, UID)
+                        }
                         startActivity(i)
                         finish()
                     }else{

@@ -15,57 +15,12 @@
         android:orientation="vertical">
 
 
-        <LinearLayout
-            android:id="@+id/profileLayoutLL"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profileImage"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:src="@drawable/veibae"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:id="@+id/usernameTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SonsonGreat10"
-                android:textAlignment="center"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="18dp"
-                android:textColor="@color/black"/>
-
-            <TextView
-                android:id="@+id/bioTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="This user does not have a bio yet."
-                android:textAlignment="center"
-                android:fontFamily="@font/poppins"
-                android:textSize="12dp"
-                android:textColor="@color/black"/>
-
-            <TextView
-                android:id="@+id/numFollowersTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="6 Followers"
-                android:textAlignment="center"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="12dp"
-                android:textColor="@color/black"/>
-
-            <Button
-                android:id="@+id/editProfileBtn"
-                android:layout_width="144dp"
-                android:layout_height="wrap_content"
-                android:text="Edit Profile" />
-        </LinearLayout>
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"/>
 
         <LinearLayout
             android:layout_width="match_parent"

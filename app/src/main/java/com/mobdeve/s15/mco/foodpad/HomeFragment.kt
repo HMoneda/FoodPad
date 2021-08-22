@@ -36,14 +36,13 @@ class HomeFragment : Fragment() {
         recyclerView = view.findViewById(R.id.followedUserRecipesRV)
         db = FirebaseFirestore.getInstance()
 
-        val query : Query = db.collection(FirestoreReferences.RECIPES_COLLECTION).orderBy(FirestoreReferences.RECIPE_NAME_FIELD)
-
-        val firestoreRecyclerOptions: FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
-
-        adapter = HomeAdapter(firestoreRecyclerOptions)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
-
+//        val query : Query = db.collection(FirestoreReferences.RECIPES_COLLECTION).orderBy(FirestoreReferences.RECIPE_NAME_FIELD)
+//
+//        val firestoreRecyclerOptions: FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
+//
+//        adapter = HomeAdapter(firestoreRecyclerOptions)
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(this.context)
 
 
         logoutBtn = view.findViewById(R.id.logoutBtn)
@@ -55,18 +54,18 @@ class HomeFragment : Fragment() {
             activity?.finish()
         }
 
-        layoutManager = LinearLayoutManager(this.context)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
+//        layoutManager = LinearLayoutManager(this.context)
+//        recyclerView.layoutManager = layoutManager
+//        recyclerView.adapter = adapter
     }
 
     override fun onStart(){
         super.onStart()
-        adapter!!.startListening()
+//        adapter.startListening()
     }
 
     override fun onStop(){
         super.onStop()
-        adapter!!.stopListening()
+//        adapter.stopListening()
     }
 }

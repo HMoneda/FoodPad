@@ -13,11 +13,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.Api
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -52,23 +50,40 @@ class LoginActivity : AppCompatActivity() {
         usernameEt = findViewById(R.id.usernameET)
         passwordEt = findViewById(R.id.passwordET)
         loginAccBtn = findViewById(R.id.loginAccBtn)
-        googleLoginBtn = findViewById(R.id.loginWithGoogleBtn);
+        googleLoginBtn = findViewById(R.id.loginWithGoogleBtn)
         loginTV = findViewById(R.id.loginTV)
 
         loginAccBtn.setOnClickListener {
-            var email : String = usernameEt.text.toString()
-            var password : String = passwordEt.text.toString()
+            val email : String = usernameEt.text.toString()
+            val password : String = passwordEt.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
             }else{
                 auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task ->
                     if(task.isSuccessful){
+                        val userRef = db.collection(FirestoreReferences.USERS_COLLECTION)
+                        val query = userRef.whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
+
                         Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_LONG).show()
-                        val i = Intent(this, HomeActivity::class.java)
-                        i.putExtra(IntentKeys.EMAIL_KEY.name, email)
-                        startActivity(i)
-                        finish()
+
+                        query.get()
+                            .addOnSuccessListener {
+                                var found = false
+                                if(it.documents.size != 0){
+                                    found = true
+                                }
+                                if(found){
+                                    val i = Intent(this, HomeActivity::class.java)
+                                    i.apply{
+                                        putExtra(IntentKeys.EMAIL_KEY.name, email)
+                                        putExtra(IntentKeys.UID_KEY.name, it.documents[0].id)
+                                    }
+                                    startActivity(i)
+                                    finish()
+                                }
+                            }
+
                     }else{
                         Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show()
                     }
@@ -116,6 +131,7 @@ class LoginActivity : AppCompatActivity() {
                     i.apply {
                         putExtra(IntentKeys.ACCOUNT_KEY.name, account.idToken!!)
                         putExtra(IntentKeys.EMAIL_KEY.name, account.email)
+                        putExtra(IntentKeys.UID_KEY.name, it.documents[0].id)
                     }
                     startActivity(i)
                     finish()
@@ -129,6 +145,7 @@ class LoginActivity : AppCompatActivity() {
                                 val i = Intent(this, HomeActivity::class.java)
                                 i.apply{
                                     putExtra(IntentKeys.EMAIL_KEY.name, account.email)
+                                    putExtra(IntentKeys.UID_KEY.name, it.documents[0].id)
                                 }
 
                                 startActivity(i)

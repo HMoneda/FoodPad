@@ -15,6 +15,7 @@ class FirestoreReferences {
         const val RECIPE_AUTHOR_FIELD = "author"
         const val NUM_COMMENTS_FIELD = "comments"
         const val NUM_LIKES_FIELD = "likes"
+        const val USER_FIELD = "user"
 
     }
 }
