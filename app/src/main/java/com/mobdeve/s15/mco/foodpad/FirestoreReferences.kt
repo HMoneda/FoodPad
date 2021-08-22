@@ -11,5 +11,10 @@ class FirestoreReferences {
         const val BIO_FIELD = "bio"
         const val FOLLOWING_FIELD = "following"
         const val FOLLOWERS_FIELD = "followers"
+        const val RECIPE_NAME_FIELD = "name"
+        const val RECIPE_AUTHOR_FIELD = "author"
+        const val NUM_COMMENTS_FIELD = "comments"
+        const val NUM_LIKES_FIELD = "likes"
+
     }
 }
