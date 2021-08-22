@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodPad">
         <activity
+            android:name=".NewGoogleLoginActivity"
+            android:exported="true" />
+        <activity
             android:name=".HomeActivity"
             android:exported="true" />
         <activity

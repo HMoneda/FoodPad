@@ -42,7 +42,7 @@ class RegisterActivity : AppCompatActivity() {
             var email : String = emailEt.text.toString()
             var password : String = passwordEt.text.toString()
 
-            var newUser = User(username, email, "", 0)
+            var newUser = User(username, email, "", 0, ArrayList())
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()

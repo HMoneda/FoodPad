@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerVertical="true"
+    android:background="@drawable/foodpad_background_dark"
+    tools:context="com.mobdeve.s15.mco.foodpad.NewGoogleLoginActivity">
+
+
+    <ImageView
+        android:id="@+id/topRoundIV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/loginTextLL"
+        app:srcCompat="@drawable/round_shape" />
+
+    <ImageView
+        android:id="@+id/bottomRoundIV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleX="-1"
+        android:scaleY="-1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/formBtnLL"
+        app:layout_constraintVertical_bias="0.959"
+        app:srcCompat="@drawable/round_shape" />
+
+    <LinearLayout
+        android:id="@+id/loginTextLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="8dp"
+        android:weightSum="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topRoundIV">
+
+        <TextView
+            android:id="@+id/logInTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Final Step"
+            android:textColor="@color/primary_yellow"
+            android:textSize="36sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/formFieldsLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:weightSum="2"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="8dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/loginTextLL">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameTIL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:boxBackgroundColor="@color/dark_gray"
+            app:boxStrokeColor="@color/primary_yellow"
+            android:textColorHint="@color/primary_yellow"
+            android:textColor="@color/primary_yellow"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:textColor="@color/primary_yellow"
+                android:inputType="text"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/formBtnLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:weightSum="2"
+        android:orientation="vertical"
+        android:paddingHorizontal="64dp"
+        android:paddingVertical="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/formFieldsLL">
+
+        <Button
+            android:id="@+id/loginAccBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Procced"
+            android:textAllCaps="false"
+            android:textSize="18dp"
+            app:backgroundTint="@color/primary_yellow"
+            app:layout_constraintTop_toBottomOf="@+id/passwordET" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

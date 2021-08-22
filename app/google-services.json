@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "168829935170-hmm970f5462cttie886b6eld2656fu1i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobdeve.s15.mco.foodpad",
+            "certificate_hash": "c51cc01d672affe7ea565e1db46d7b7c4cc2979e"
+          }
+        },
+        {
           "client_id": "168829935170-k0vas3b76kqj273c5nqhu7v257mn8h3s.apps.googleusercontent.com",
           "client_type": 3
         }
