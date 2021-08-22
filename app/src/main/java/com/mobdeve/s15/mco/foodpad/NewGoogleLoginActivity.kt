@@ -49,6 +49,7 @@ class NewGoogleLoginActivity : AppCompatActivity() {
                             Log.w(TAG, "Error Adding Document", it)
                         }
                         val i = Intent(this, HomeActivity::class.java)
+                        i.putExtra(IntentKeys.EMAIL_KEY.name, email)
                         startActivity(i)
                         finish()
                     }else{

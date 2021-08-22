@@ -13,13 +13,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var loginBtn : Button
     private lateinit var  signUpBtn : Button
 
+    private val TAG = LogTags.MAIN_ACTIVITY.name
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
 
         if(auth.currentUser != null){
+            val email = auth.currentUser!!.email
             val intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra(IntentKeys.EMAIL_KEY.name, email)
             startActivity(intent)
             finish()
         }
@@ -30,13 +34,13 @@ class MainActivity : AppCompatActivity() {
         signUpBtn = findViewById(R.id.signUpBtn)
 
         loginBtn.setOnClickListener {
-            Log.d(LogTags.MAIN_ACTIVITY.name, "Login Clicked!")
+            Log.d(TAG, "Login Clicked!")
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 
         signUpBtn.setOnClickListener {
-            Log.d(LogTags.MAIN_ACTIVITY.name, "Sign Up Clicked!")
+            Log.d(TAG, "Sign Up Clicked!")
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }

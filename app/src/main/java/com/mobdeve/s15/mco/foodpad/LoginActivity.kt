@@ -66,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
                     if(task.isSuccessful){
                         Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_LONG).show()
                         val i = Intent(this, HomeActivity::class.java)
+                        i.putExtra(IntentKeys.EMAIL_KEY.name, email)
                         startActivity(i)
                         finish()
                     }else{
@@ -105,13 +106,10 @@ class LoginActivity : AppCompatActivity() {
         val userRef = db.collection(FirestoreReferences.USERS_COLLECTION)
         val query = userRef.whereEqualTo(FirestoreReferences.EMAIL_FIELD, account.email)
         query.get()
-            .addOnSuccessListener { documents ->
+            .addOnSuccessListener {
                 var found = false
-                for(document in documents){
-                    if(account.email == document.data.getValue(FirestoreReferences.EMAIL_FIELD).toString()){
-                        found = true
-                        break
-                    }
+                if(it.documents.size != 0){
+                    found = true
                 }
                 if(!found){
                     val i = Intent(this, NewGoogleLoginActivity::class.java)
@@ -127,7 +125,12 @@ class LoginActivity : AppCompatActivity() {
                         .addOnCompleteListener(this){ task ->
                             if(task.isSuccessful){
                                 Log.d(TAG, "signInWithCredential:success")
+
                                 val i = Intent(this, HomeActivity::class.java)
+                                i.apply{
+                                    putExtra(IntentKeys.EMAIL_KEY.name, account.email)
+                                }
+
                                 startActivity(i)
                                 finish()
                             }else{
