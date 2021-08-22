@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Api
@@ -47,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
 
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
-
 
         usernameEt = findViewById(R.id.usernameET)
         passwordEt = findViewById(R.id.passwordET)
@@ -89,32 +89,54 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == 100){
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try{
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
+                firebaseAuthWithGoogle(account)
             }catch (e : ApiException){
                 Log.w(TAG, "Google sign in failed", e)
             }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken : String){
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this){ task ->
-                if(task.isSuccessful){
-                    Log.d(TAG, "signInWithCredential:success")
-                    val i = Intent(this, HomeActivity::class.java)
+    private fun firebaseAuthWithGoogle(account : GoogleSignInAccount){
+        val userRef = db.collection(FirestoreReferences.USERS_COLLECTION)
+        val query = userRef.whereEqualTo(FirestoreReferences.EMAIL_FIELD, account.email)
+        query.get()
+            .addOnSuccessListener { documents ->
+                var found = false
+                for(document in documents){
+                    if(account.email == document.data.getValue(FirestoreReferences.EMAIL_FIELD).toString()){
+                        found = true
+                        break
+                    }
+                }
+                if(!found){
+                    val i = Intent(this, NewGoogleLoginActivity::class.java)
+                    i.apply {
+                        putExtra(IntentKeys.ACCOUNT_KEY.name, account.idToken!!)
+                        putExtra(IntentKeys.EMAIL_KEY.name, account.email)
+                    }
                     startActivity(i)
                     finish()
                 }else{
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+                    auth.signInWithCredential(credential)
+                        .addOnCompleteListener(this){ task ->
+                            if(task.isSuccessful){
+                                Log.d(TAG, "signInWithCredential:success")
+                                val i = Intent(this, HomeActivity::class.java)
+                                startActivity(i)
+                                finish()
+                            }else{
+                                Log.w(TAG, "signInWithCredential:failure", task.exception)
+                            }
+                        }
                 }
             }
+
     }
 
 }

@@ -57,7 +57,7 @@ class RegisterActivity : AppCompatActivity() {
         val email : String = emailEt.text.toString()
         val password : String = passwordEt.text.toString()
 
-        val newUser = User(username, email, "", 0, ArrayList())
+        val newUser = User(username, email, "", 0, ArrayList(), ArrayList())
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_LONG).show()
