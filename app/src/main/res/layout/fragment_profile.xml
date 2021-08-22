@@ -1,16 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     android:background="@color/background_gray"
-    tools:context=".HomeFragment">
+    tools:context=".ProfileFragment">
 
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Profile Fragment"
-        android:gravity="center"
-        android:textSize="24sp"/>
+        android:orientation="vertical">
 
+
+        <LinearLayout
+            android:id="@+id/profileLayoutLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profileImage"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/veibae"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/usernameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SonsonGreat10"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="18dp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/bioTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This user does not have a bio yet."
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins"
+                android:textSize="12dp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/numFollowersTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="6 Followers"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="12dp"
+                android:textColor="@color/black"/>
+
+            <Button
+                android:id="@+id/followBtn"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:text="Follow" />
+
+            <Button
+                android:id="@+id/editProfileBtn"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/recipesTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Recipes"
+                android:fontFamily="@font/poppins_medium"
+                android:textSize="14dp"
+                android:textColor="@color/black"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userRecipesRV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 </FrameLayout>
