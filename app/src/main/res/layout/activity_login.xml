@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            app:srcCompat="@drawable/spaghetti" />
+            app:srcCompat="@drawable/ic_spaghetti" />
     </LinearLayout>
 
     <LinearLayout
@@ -150,7 +150,7 @@
             android:gravity="center"
             android:background="@drawable/rounded_button"
             android:fontFamily="@font/poppins_medium"
-            android:drawableLeft="@drawable/google_logo"
+            android:drawableLeft="@drawable/ic_google_logo"
             android:text="Sign in with Google"
             android:textAllCaps="false"
             android:textSize="18dp"
