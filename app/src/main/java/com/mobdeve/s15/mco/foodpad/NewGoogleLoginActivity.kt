@@ -44,7 +44,7 @@ class NewGoogleLoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this){ task ->
                     if(task.isSuccessful){
                         Log.d(TAG, "signInWithCredential:success")
-                        db.collection(FirestoreReferences.USERS_COLLECTION).add(newUser).addOnSuccessListener {
+                        FirestoreReferences.addUser(newUser).addOnSuccessListener {
                             Log.d(TAG, "DocumentSnapshot added with ID: ${it.id}")
                         }.addOnFailureListener{
                             Log.w(TAG, "Error Adding Document", it)

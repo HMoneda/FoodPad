@@ -18,7 +18,6 @@ import java.util.regex.Pattern
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var auth : FirebaseAuth
-    private lateinit var db : FirebaseFirestore
     private lateinit var usernameEt : EditText
     private lateinit var emailEt : EditText
     private lateinit var passwordEt : EditText
@@ -33,7 +32,6 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
 
         usernameEt = findViewById(R.id.signupUsernameEt)
         emailEt = findViewById(R.id.signupEmailEt)
@@ -68,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
         } else{
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                    db.collection(FirestoreReferences.USERS_COLLECTION).add(newUser).addOnSuccessListener {
+                    FirestoreReferences.addUser(newUser).addOnSuccessListener {
                         Log.d(TAG, "DocumentSnapshot added with ID: ${it.id}")
                         val i = Intent(this, HomeActivity::class.java)
                         i.apply {
@@ -80,7 +78,6 @@ class RegisterActivity : AppCompatActivity() {
                     }.addOnFailureListener{
                         Log.w(LogTags.LOGIN_ACTIVITY.name, "Error Adding Document", it)
                     }
-
                 }else{
                     Log.w(TAG, task.exception)
                     if(task.exception is FirebaseAuthUserCollisionException){

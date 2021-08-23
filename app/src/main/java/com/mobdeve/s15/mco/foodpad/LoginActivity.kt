@@ -62,28 +62,17 @@ class LoginActivity : AppCompatActivity() {
             }else{
                 auth.signInWithEmailAndPassword(email,password).addOnCompleteListener { task ->
                     if(task.isSuccessful){
-                        val userRef = db.collection(FirestoreReferences.USERS_COLLECTION)
-                        val query = userRef.whereEqualTo(FirestoreReferences.EMAIL_FIELD, email)
-
                         Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_LONG).show()
 
-                        query.get()
-                            .addOnSuccessListener {
-                                var found = false
-                                if(it.documents.size != 0){
-                                    found = true
-                                }
-                                if(found){
-                                    val i = Intent(this, HomeActivity::class.java)
-                                    i.apply{
-                                        putExtra(IntentKeys.EMAIL_KEY.name, email)
-                                        putExtra(IntentKeys.UID_KEY.name, it.documents[0].id)
-                                    }
-                                    startActivity(i)
-                                    finish()
-                                }
+                        FirestoreReferences.getUserByEmail(email).addOnSuccessListener {
+                            if(it.documents.size != 0){
+                                val intent = Intent(this, HomeActivity::class.java)
+                                intent.putExtra(IntentKeys.UID_KEY.name, it.documents[0].id)
+                                intent.putExtra(IntentKeys.EMAIL_KEY.name, email)
+                                startActivity(intent)
+                                finish()
                             }
-
+                        }
                     }else{
                         Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show()
                     }
@@ -118,9 +107,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(account : GoogleSignInAccount){
-        val userRef = db.collection(FirestoreReferences.USERS_COLLECTION)
-        val query = userRef.whereEqualTo(FirestoreReferences.EMAIL_FIELD, account.email)
-        query.get()
+        FirestoreReferences.getUserByEmail(account.email)
             .addOnSuccessListener {
                 var found = false
                 if(it.documents.size != 0){

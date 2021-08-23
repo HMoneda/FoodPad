@@ -23,7 +23,7 @@ class ProfileFragment : Fragment() {
     private lateinit var recipeRecyclerView: RecyclerView
     private lateinit var profileAdapter: ProfileAdapter
     private lateinit var recipeAdapter: HomeAdapter
-    private lateinit var db: FirebaseFirestore
+
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_profile , container , false)
@@ -33,12 +33,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         profileRecyclerView = view.findViewById(R.id.profileRV)
         recipeRecyclerView = view.findViewById(R.id.userRecipesRV)
-        db = FirebaseFirestore.getInstance()
 
         val email = activity?.intent?.getStringExtra(IntentKeys.EMAIL_KEY.name)
         val UID = activity?.intent?.getStringExtra(IntentKeys.UID_KEY.name)
-        val query = db.collection(FirestoreReferences.USERS_COLLECTION).whereEqualTo(FirestoreReferences.EMAIL_FIELD,email)
-        val recipeQuery = db.collection(FirestoreReferences.RECIPES_COLLECTION).whereEqualTo(FirestoreReferences.USER_FIELD, UID)
+        val query = FirestoreReferences.getUserByEmailQuery(email)
+        val recipeQuery = FirestoreReferences.getUserRecipesQuery(UID)
 
         val firestoreProfileRecyclerOptions: FirestoreRecyclerOptions<User> = FirestoreRecyclerOptions.Builder<User>().setQuery(query, User::class.java).build()
         val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(recipeQuery, Recipe::class.java).build()
