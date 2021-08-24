@@ -7,6 +7,11 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,9 +31,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HomeActivity::class.java)
 
             if (email != null) {
-                FirestoreReferences.getUserByEmail(email).addOnSuccessListener {
-                    if(it.documents.size != 0){
-                        intent.putExtra(IntentKeys.UID_KEY.name, it.documents[0].id)
+                GlobalScope.launch(Dispatchers.IO){
+                    val res = FirestoreReferences.getUserByEmail(email).await()
+                    val UID = res.documents[0].id
+                    withContext(Dispatchers.Main){
+                        intent.putExtra(IntentKeys.UID_KEY.name, UID)
                         intent.putExtra(IntentKeys.EMAIL_KEY.name, email)
                         startActivity(intent)
                         finish()

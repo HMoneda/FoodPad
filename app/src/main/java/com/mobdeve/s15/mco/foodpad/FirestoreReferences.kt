@@ -48,6 +48,10 @@ class FirestoreReferences {
             return getUserCollectionReference().whereEqualTo(EMAIL_FIELD, email).get()
         }
 
+        fun getUserByUsername(username : String): Task<QuerySnapshot>{
+            return getUserCollectionReference().whereEqualTo(USERNAME_FIELD, username).get()
+        }
+
         fun getUserByEmailQuery(email : String?) : Query{
             return getUserCollectionReference().whereEqualTo(EMAIL_FIELD, email)
         }

@@ -6,10 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class NewGoogleLoginActivity : AppCompatActivity() {
 
@@ -32,7 +39,6 @@ class NewGoogleLoginActivity : AppCompatActivity() {
 
         val accountID = intent.getStringExtra(IntentKeys.ACCOUNT_KEY.name)
         val email = intent.getStringExtra(IntentKeys.EMAIL_KEY.name)
-        val UID = intent.getStringExtra(IntentKeys.UID_KEY.name)
 
         proceedBtn.setOnClickListener {
             val username = usernameEt.text.toString()
@@ -40,26 +46,35 @@ class NewGoogleLoginActivity : AppCompatActivity() {
 
             val newUser = User(username,email!!,"",0, ArrayList(),ArrayList())
 
-            auth.signInWithCredential(credential)
-                .addOnCompleteListener(this){ task ->
-                    if(task.isSuccessful){
-                        Log.d(TAG, "signInWithCredential:success")
-                        FirestoreReferences.addUser(newUser).addOnSuccessListener {
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${it.id}")
-                        }.addOnFailureListener{
-                            Log.w(TAG, "Error Adding Document", it)
+            GlobalScope.launch(Dispatchers.IO){
+                try {
+                    val userDoc = FirestoreReferences.getUserByUsername(username).await()
+                    if(!userDoc.isEmpty) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                this@NewGoogleLoginActivity, "Username Taken", Toast.LENGTH_LONG).show()
                         }
-                        val i = Intent(this, HomeActivity::class.java)
+                        return@launch
+                    }
+                    auth.signInWithCredential(credential).await()
+                    Log.d(TAG, "signInWithCredential:success")
+                    val res = FirestoreReferences.addUser(newUser).await()
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${res.id}")
+                    withContext(Dispatchers.Main) {
+                        val i = Intent(this@NewGoogleLoginActivity, HomeActivity::class.java)
                         i.apply {
                             putExtra(IntentKeys.EMAIL_KEY.name, email)
-                            putExtra(IntentKeys.UID_KEY.name, UID)
+                            putExtra(IntentKeys.UID_KEY.name, res.id)
                         }
                         startActivity(i)
                         finish()
-                    }else{
-                        Log.w(TAG, "signInWithCredential:failure", task.exception)
                     }
+                } catch (err: FirebaseAuthInvalidUserException) {
+                    Log.w(TAG, "signInWithCredential:failure", err)
+                } catch (err: Exception){
+                    Log.w(TAG, "Error Adding Document", err)
                 }
+            }
         }
     }
 }

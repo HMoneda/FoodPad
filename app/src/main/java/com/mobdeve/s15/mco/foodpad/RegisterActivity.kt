@@ -13,6 +13,12 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
@@ -64,26 +70,35 @@ class RegisterActivity : AppCompatActivity() {
         }else if(password.length < PASSWORD_LENGTH){
             Toast.makeText(this, "Password must be 8 characters long!", Toast.LENGTH_LONG).show()
         } else{
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    FirestoreReferences.addUser(newUser).addOnSuccessListener {
-                        Log.d(TAG, "DocumentSnapshot added with ID: ${it.id}")
-                        val i = Intent(this, HomeActivity::class.java)
-                        i.apply {
-                            putExtra(IntentKeys.EMAIL_KEY.name, email)
-                            putExtra(IntentKeys.UID_KEY.name, it.id)
+            GlobalScope.launch(Dispatchers.IO){
+                try{
+                    val userDoc = FirestoreReferences.getUserByUsername(username).await()
+                    if(!userDoc.isEmpty){
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(this@RegisterActivity, "Username Taken", Toast.LENGTH_LONG).show()
                         }
-                        startActivity(i)
-                        finish()
-                    }.addOnFailureListener{
-                        Log.w(LogTags.LOGIN_ACTIVITY.name, "Error Adding Document", it)
-                    }
-                }else{
-                    Log.w(TAG, task.exception)
-                    if(task.exception is FirebaseAuthUserCollisionException){
-                        Toast.makeText(this, "Email Already Registered", Toast.LENGTH_LONG).show()
                     }else{
-                        Toast.makeText(this, "Registration Failed", Toast.LENGTH_LONG).show()
+                        auth.createUserWithEmailAndPassword(email, password).await()
+                        val res = FirestoreReferences.addUser(newUser).await()
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${res.id}")
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(this@RegisterActivity, "Successfully Registered", Toast.LENGTH_LONG).show()
+                            val i = Intent(this@RegisterActivity, HomeActivity::class.java)
+                            i.apply {
+                                putExtra(IntentKeys.EMAIL_KEY.name, email)
+                                putExtra(IntentKeys.UID_KEY.name, res.id)
+                            }
+                            startActivity(i)
+                            finish()
+                        }
+                    }
+                }catch (err : FirebaseAuthUserCollisionException){
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(this@RegisterActivity, "Email Already Registered", Toast.LENGTH_LONG).show()
+                    }
+                }catch (err : Exception){
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(this@RegisterActivity, "Registration Failed", Toast.LENGTH_LONG).show()
                     }
                 }
             }
