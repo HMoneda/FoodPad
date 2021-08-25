@@ -41,10 +41,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val gso = GoogleSignInOptions
-            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("168829935170-k0vas3b76kqj273c5nqhu7v257mn8h3s.apps.googleusercontent.com")
-            .requestEmail()
-            .build()
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("168829935170-k0vas3b76kqj273c5nqhu7v257mn8h3s.apps.googleusercontent.com")
+                .requestEmail()
+                .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
@@ -69,11 +69,7 @@ class LoginActivity : AppCompatActivity() {
                         auth.signInWithEmailAndPassword(email, password).await()
                         val res = FirestoreReferences.getUserByEmail(email).await()
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Successfully Logged In",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this@LoginActivity, "Successfully Logged In", Toast.LENGTH_LONG).show()
                             val i = Intent(this@LoginActivity, HomeActivity::class.java)
                             i.putExtra(IntentKeys.UID_KEY.name, res.documents[0].id)
                             i.putExtra(IntentKeys.EMAIL_KEY.name, email)
@@ -82,19 +78,11 @@ class LoginActivity : AppCompatActivity() {
                         }
                     } catch (err: FirebaseAuthInvalidUserException) {
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Invalid Credentials",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this@LoginActivity, "Invalid Credentials", Toast.LENGTH_LONG).show()
                         }
                     } catch (err: FirebaseAuthInvalidCredentialsException) {
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Invalid Credentials",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(this@LoginActivity, "Invalid Credentials", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
