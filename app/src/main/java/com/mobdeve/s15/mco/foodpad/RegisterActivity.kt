@@ -13,11 +13,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.regex.Pattern
 
@@ -70,7 +67,7 @@ class RegisterActivity : AppCompatActivity() {
         }else if(password.length < PASSWORD_LENGTH){
             Toast.makeText(this, "Password must be 8 characters long!", Toast.LENGTH_LONG).show()
         } else{
-            GlobalScope.launch(Dispatchers.IO){
+            CoroutineScope(Dispatchers.IO).launch{
                 try{
                     val userDoc = FirestoreReferences.getUserByUsername(username).await()
                     if(!userDoc.isEmpty){

@@ -12,11 +12,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class NewGoogleLoginActivity : AppCompatActivity() {
 
@@ -46,7 +43,7 @@ class NewGoogleLoginActivity : AppCompatActivity() {
 
             val newUser = User(username,email!!,"",0, ArrayList(),ArrayList())
 
-            GlobalScope.launch(Dispatchers.IO){
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val userDoc = FirestoreReferences.getUserByUsername(username).await()
                     if(!userDoc.isEmpty) {

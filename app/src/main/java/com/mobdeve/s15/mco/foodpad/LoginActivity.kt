@@ -21,11 +21,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity() {
     private var TAG = LogTags.LOGIN_ACTIVITY.name
@@ -67,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
             } else {
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch {
                     try {
                         auth.signInWithEmailAndPassword(email, password).await()
                         val res = FirestoreReferences.getUserByEmail(email).await()
@@ -131,7 +128,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
-        GlobalScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             val res = FirestoreReferences.getUserByEmail(account.email!!).await()
             if (res.documents.size == 0) {
                 withContext(Dispatchers.Main) {

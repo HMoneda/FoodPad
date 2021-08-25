@@ -7,11 +7,8 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HomeActivity::class.java)
 
             if (email != null) {
-                GlobalScope.launch(Dispatchers.IO){
+                CoroutineScope(Dispatchers.IO).launch{
                     val res = FirestoreReferences.getUserByEmail(email).await()
                     val UID = res.documents[0].id
                     withContext(Dispatchers.Main){
