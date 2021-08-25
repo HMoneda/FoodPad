@@ -1,6 +1,7 @@
 package com.mobdeve.s15.mco.foodpad
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +10,11 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.GoogleAuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import java.net.URI
 
 class NewGoogleLoginActivity : AppCompatActivity() {
 
@@ -36,12 +37,13 @@ class NewGoogleLoginActivity : AppCompatActivity() {
 
         val accountID = intent.getStringExtra(IntentKeys.ACCOUNT_KEY.name)
         val email = intent.getStringExtra(IntentKeys.EMAIL_KEY.name)
+        val profileUri = intent.getStringExtra(IntentKeys.PROFILE_URI_KEY.name)
 
         proceedBtn.setOnClickListener {
             val username = usernameEt.text.toString()
             val credential = GoogleAuthProvider.getCredential(accountID, null)
 
-            val newUser = User(username,email!!,"",0, ArrayList(),ArrayList())
+            val newUser = User(username,email!!,profileUri!!,"",0, ArrayList(),ArrayList())
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -62,6 +64,7 @@ class NewGoogleLoginActivity : AppCompatActivity() {
                         i.apply {
                             putExtra(IntentKeys.EMAIL_KEY.name, email)
                             putExtra(IntentKeys.UID_KEY.name, res.id)
+                            putExtra(IntentKeys.PROFILE_URI_KEY.name, profileUri)
                         }
                         startActivity(i)
                         finish()

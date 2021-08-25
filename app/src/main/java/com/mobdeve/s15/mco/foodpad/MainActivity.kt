@@ -31,9 +31,11 @@ class MainActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.IO).launch{
                     val res = FirestoreReferences.getUserByEmail(email).await()
                     val UID = res.documents[0].id
+                    val profileUri = res.documents[0].toObject(User::class.java)!!.imgUri
                     withContext(Dispatchers.Main){
                         intent.putExtra(IntentKeys.UID_KEY.name, UID)
                         intent.putExtra(IntentKeys.EMAIL_KEY.name, email)
+                        intent.putExtra(IntentKeys.PROFILE_URI_KEY.name, profileUri)
                         startActivity(intent)
                         finish()
                     }

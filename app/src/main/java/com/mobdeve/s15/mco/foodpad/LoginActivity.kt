@@ -73,6 +73,9 @@ class LoginActivity : AppCompatActivity() {
                             val i = Intent(this@LoginActivity, HomeActivity::class.java)
                             i.putExtra(IntentKeys.UID_KEY.name, res.documents[0].id)
                             i.putExtra(IntentKeys.EMAIL_KEY.name, email)
+                            i.putExtra(IntentKeys.PROFILE_URI_KEY.name,
+                                res.documents[0].toObject(User::class.java)?.imgUri
+                            )
                             startActivity(i)
                             finish()
                         }
@@ -124,6 +127,7 @@ class LoginActivity : AppCompatActivity() {
                     i.apply {
                         putExtra(IntentKeys.ACCOUNT_KEY.name, account.idToken!!)
                         putExtra(IntentKeys.EMAIL_KEY.name, account.email)
+                        putExtra(IntentKeys.PROFILE_URI_KEY.name, account.photoUrl!!.toString())
                     }
                     startActivity(i)
                     finish()
@@ -138,6 +142,7 @@ class LoginActivity : AppCompatActivity() {
                         i.apply {
                             putExtra(IntentKeys.EMAIL_KEY.name, account.email)
                             putExtra(IntentKeys.UID_KEY.name, res.documents[0].id)
+                            putExtra(IntentKeys.PROFILE_URI_KEY.name, account.photoUrl!!.toString())
                         }
                         startActivity(i)
                         finish()

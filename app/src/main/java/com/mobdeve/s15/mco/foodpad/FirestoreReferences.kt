@@ -1,11 +1,18 @@
 package com.mobdeve.s15.mco.foodpad
 
+import android.net.Uri
+import android.widget.ImageView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.tasks.await
 
 class FirestoreReferences {
     companion object{
         private var db : FirebaseFirestore? = null
+        private var storage : StorageReference? = null
         private var usersRef : CollectionReference? = null
         private var recipeRef : CollectionReference? = null
 
@@ -28,6 +35,13 @@ class FirestoreReferences {
                 db = FirebaseFirestore.getInstance()
             }
             return db as FirebaseFirestore
+        }
+
+        fun getStorageReferenceInstance() : StorageReference{
+            if(storage == null){
+                storage = FirebaseStorage.getInstance().reference
+            }
+            return storage as StorageReference
         }
 
         fun getUserCollectionReference() : CollectionReference{
@@ -62,6 +76,15 @@ class FirestoreReferences {
 
         fun getUserRecipesQuery(uid : String?) : Query{
             return  getRecipeCollectionReference().whereEqualTo(USER_FIELD, uid)
+        }
+
+        fun generateUserPhotoPath(uid: String, imageUri : Uri) : String{
+            return "images/users/${uid}-${imageUri.lastPathSegment}"
+        }
+
+        fun getDefaultAvatar(): Task<Uri> {
+            val path = "images/users/DefaultAvatar.png"
+            return getStorageReferenceInstance().child(path).downloadUrl
         }
     }
 }

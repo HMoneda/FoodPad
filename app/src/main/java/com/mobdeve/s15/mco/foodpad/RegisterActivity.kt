@@ -12,11 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
-import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -58,7 +56,6 @@ class RegisterActivity : AppCompatActivity() {
         val email : String = emailEt.text.toString()
         val password : String = passwordEt.text.toString()
 
-        val newUser = User(username, email, "", 0, ArrayList(), ArrayList())
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_LONG).show()
@@ -70,6 +67,9 @@ class RegisterActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch{
                 try{
                     val userDoc = FirestoreReferences.getUserByUsername(username).await()
+                    val profileUri = FirestoreReferences.getDefaultAvatar().await().toString()
+                    val newUser = User(username, email, profileUri, "", 0, ArrayList(), ArrayList())
+
                     if(!userDoc.isEmpty){
                         withContext(Dispatchers.Main){
                             Toast.makeText(this@RegisterActivity, "Username Taken", Toast.LENGTH_LONG).show()
@@ -84,6 +84,7 @@ class RegisterActivity : AppCompatActivity() {
                             i.apply {
                                 putExtra(IntentKeys.EMAIL_KEY.name, email)
                                 putExtra(IntentKeys.UID_KEY.name, res.id)
+                                putExtra(IntentKeys.PROFILE_URI_KEY.name, profileUri)
                             }
                             startActivity(i)
                             finish()
