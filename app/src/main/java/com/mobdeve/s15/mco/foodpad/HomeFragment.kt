@@ -33,31 +33,11 @@ private const val ARG_PARAM2 = "param2"
 
 class HomeFragment : Fragment() {
     private lateinit var logoutBtn : Button
-    private lateinit var uploadBtn : Button
-    private lateinit var selectBtn : Button
     private lateinit var selectedImgIV : ImageView
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: HomeAdapter
     private lateinit var db: FirebaseFirestore
-
-    private var imageUri : Uri? = null
-
-    private val activityResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            try {
-                if (result.data != null) {
-                    imageUri = result.data!!.data!!
-                    Picasso.get().load(imageUri).into(selectedImgIV)
-                    Log.d("HOME_FRAGMENT", "Image Selected Complete")
-                }
-            } catch (err: Exception) {
-                Log.d("HOME_FRAGMENT", err.localizedMessage!!)
-            }
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home , container , false)
@@ -65,7 +45,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val UID = activity?.intent?.getStringExtra(IntentKeys.UID_KEY.name)
         recyclerView = view.findViewById(R.id.followedUserRecipesRV)
         db = FirebaseFirestore.getInstance()
 
@@ -79,44 +58,6 @@ class HomeFragment : Fragment() {
 
 
         logoutBtn = view.findViewById(R.id.logoutBtn)
-        selectBtn = view.findViewById(R.id.selectBtn)
-        uploadBtn = view.findViewById(R.id.uploadBtn)
-        selectedImgIV = view.findViewById(R.id.selectedImgIV)
-
-        selectBtn.setOnClickListener {
-            val i = Intent()
-            i.apply {
-                type = "image/*"
-                action = Intent.ACTION_OPEN_DOCUMENT
-            }
-            activityResultLauncher.launch(Intent.createChooser(i, "Select Picture"))
-        }
-
-        uploadBtn.setOnClickListener {
-            if(imageUri != null){
-                val progressDialog = ProgressDialog(view.context)
-                progressDialog.setTitle("Uploading");
-                progressDialog.show()
-
-                val imgRef = FirestoreReferences.getStorageReferenceInstance()
-                    .child(FirestoreReferences.generateUserPhotoPath(UID!!, imageUri!!))
-
-                imgRef.putFile(imageUri!!).addOnProgressListener { taskSnapshot ->
-                    var progress = (100.0 * taskSnapshot.bytesTransferred)/ taskSnapshot.totalByteCount
-                    progressDialog.setCanceledOnTouchOutside(false)
-                    progressDialog.setMessage("Uploaded ${progress}%")
-
-                }.addOnSuccessListener {
-                    progressDialog.setCanceledOnTouchOutside(true)
-                    progressDialog.setMessage("Success!")
-                }.addOnFailureListener{
-                    progressDialog.setCanceledOnTouchOutside(false)
-                    progressDialog.setMessage("Error occurred. Please try again.")
-                }
-            }else{
-                Toast.makeText(view.context,"Please supply an image to post", Toast.LENGTH_LONG).show()
-            }
-        }
 
         logoutBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()

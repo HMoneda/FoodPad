@@ -124,6 +124,10 @@ class EditProfileActivity : AppCompatActivity() {
                 }
             }
         }
+
+        backBtn.setOnClickListener {
+            finish()
+        }
     }
 
     private fun loadProfile(username : String, bio : String, uri: String, isGoogleSignIn : Boolean){
