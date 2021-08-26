@@ -32,7 +32,6 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class HomeFragment : Fragment() {
-    private lateinit var logoutBtn : Button
     private lateinit var uploadBtn : Button
     private lateinit var selectBtn : Button
     private lateinit var selectedImgIV : ImageView
@@ -77,8 +76,6 @@ class HomeFragment : Fragment() {
 //        recyclerView.adapter = adapter
 //        recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-
-        logoutBtn = view.findViewById(R.id.logoutBtn)
         selectBtn = view.findViewById(R.id.selectBtn)
         uploadBtn = view.findViewById(R.id.uploadBtn)
         selectedImgIV = view.findViewById(R.id.selectedImgIV)
@@ -116,14 +113,6 @@ class HomeFragment : Fragment() {
             }else{
                 Toast.makeText(view.context,"Please supply an image to post", Toast.LENGTH_LONG).show()
             }
-        }
-
-        logoutBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            Toast.makeText(activity, "Logged Out Successfully", Toast.LENGTH_LONG).show()
-            val i = Intent(activity, MainActivity::class.java)
-            activity?.startActivity(i)
-            activity?.finish()
         }
 
 //        layoutManager = LinearLayoutManager(this.context)

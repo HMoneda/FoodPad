@@ -11,16 +11,6 @@
         android:title="Search" />
 
     <item
-        android:id="@+id/create_item"
-        android:icon="@drawable/ic_create"
-        android:title="Create" />
-
-    <item
-        android:id="@+id/notification_item"
-        android:icon="@drawable/ic_notifications"
-        android:title="Notifications" />
-
-    <item
         android:id="@+id/profile_item"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />

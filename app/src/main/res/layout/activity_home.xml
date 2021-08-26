@@ -8,6 +8,19 @@
     tools:context=".HomeActivity">
 
 
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLL">
+
+    </FrameLayout>
+
+
+
     <LinearLayout
         android:id="@+id/headerLL"
         android:layout_width="match_parent"
@@ -15,20 +28,32 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center_vertical"
         android:background="@drawable/header"
         android:orientation="vertical">
 
+        <ImageButton
+            android:id="@+id/logoutBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/logout" />
     </LinearLayout>
 
-
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/createRecipeFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerLL"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"/>
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        android:clickable="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        app:borderWidth="0dp"
+        android:backgroundTint="@color/primary_yellow"
+        app:tint="@color/black"
+        app:srcCompat="@drawable/ic_create" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp">
+
+    <EditText
+        android:id="@+id/qtyET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:ems="10"
+        android:hint="Quantity"
+        android:inputType="text"
+        android:height="48dp"
+        android:text=""
+        android:textAlignment="textStart"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/bioET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Ingredient"
+        android:inputType="text"
+        android:height="48dp"
+        android:text=""
+        android:textAlignment="textStart"
+        android:textSize="14sp" />
+
+    <ImageButton
+        android:id="@+id/deleteIngredientBtn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:background="@drawable/close" />
+
+
+</LinearLayout>

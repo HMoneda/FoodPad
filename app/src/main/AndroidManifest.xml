@@ -11,6 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodPad">
         <activity
+            android:name=".ViewRecipeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CreateRecipeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EditRecipeActivity"
+            android:exported="true" />
+        <activity
             android:name=".EditProfileActivity"
             android:exported="true" />
         <activity
