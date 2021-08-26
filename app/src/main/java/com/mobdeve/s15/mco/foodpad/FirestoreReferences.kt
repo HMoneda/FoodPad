@@ -1,13 +1,20 @@
 package com.mobdeve.s15.mco.foodpad
 
 import android.net.Uri
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class FirestoreReferences {
     companion object{
@@ -22,6 +29,7 @@ class FirestoreReferences {
         const val USERNAME_FIELD = "username"
         const val FOLLOWER_COUNT_FIELD = "followerCount"
         const val BIO_FIELD = "bio"
+        const val PROFILE_URI_FIELD = "imgUri"
         const val FOLLOWING_FIELD = "following"
         const val FOLLOWERS_FIELD = "followers"
         const val RECIPE_NAME_FIELD = "name"
@@ -74,8 +82,24 @@ class FirestoreReferences {
             return getUserCollectionReference().add(newUser)
         }
 
+        fun updateUserBio(uid : String, bio : String): Task<Void> {
+            return getUserCollectionReference().document(uid).update(BIO_FIELD, bio)
+        }
+
+        suspend fun updateUserPhoto(uid: String, uri: Uri?){
+            val path = generateUserProfilePath(uid)
+            getStorageReferenceInstance().child(path).putFile(uri!!).await()
+
+            val newUri = getStorageReferenceInstance().child(path).downloadUrl.await()
+            getUserCollectionReference().document(uid).update(PROFILE_URI_FIELD, newUri.toString()).await()
+        }
+
         fun getUserRecipesQuery(uid : String?) : Query{
-            return  getRecipeCollectionReference().whereEqualTo(USER_FIELD, uid)
+            return getRecipeCollectionReference().whereEqualTo(USER_FIELD, uid)
+        }
+
+        fun generateUserProfilePath(uid: String) : String{
+            return "images/users/${uid}-ProfileAvatar"
         }
 
         fun generateUserPhotoPath(uid: String, imageUri : Uri) : String{

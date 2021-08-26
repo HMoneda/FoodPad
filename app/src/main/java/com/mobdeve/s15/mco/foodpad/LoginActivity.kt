@@ -71,7 +71,8 @@ class LoginActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(this@LoginActivity, "Successfully Logged In", Toast.LENGTH_LONG).show()
                             val i = Intent(this@LoginActivity, HomeActivity::class.java)
-                            i.putExtra(IntentKeys.UID_KEY.name, res.documents[0].id)
+                            val uid = res.documents[0].id
+                            i.putExtra(IntentKeys.UID_KEY.name, uid)
                             i.putExtra(IntentKeys.EMAIL_KEY.name, email)
                             i.putExtra(IntentKeys.PROFILE_URI_KEY.name,
                                 res.documents[0].toObject(User::class.java)?.imgUri

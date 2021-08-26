@@ -18,7 +18,7 @@
 
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/backBtn"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_gravity="center_vertical"
@@ -127,10 +127,11 @@
         android:textSize="18sp" />
 
         <View
+            android:id="@+id/changePasswordV"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="16dp"
-            android:background="#ff000000"/>
+            android:background="#ff000000" />
 
         <EditText
             android:id="@+id/newPasswordET"
