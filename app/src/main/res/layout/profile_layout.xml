@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:text="SonsonGreat10"
+            android:text="Username"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="18dp" />
