@@ -34,24 +34,6 @@
             android:layout_height="wrap_content"
             android:text="Logout" />
 
-        <ImageView
-            android:id="@+id/selectedImgIV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:src="@tools:sample/avatars" />
-
-        <Button
-            android:id="@+id/selectBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/uploadBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Upload" />
-
     </LinearLayout>
 
 </FrameLayout>
