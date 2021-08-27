@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewCL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/headerLL"
@@ -20,7 +20,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
 
             <ImageButton
                 android:id="@+id/imageButton"
@@ -50,9 +49,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/headerLL"
+            android:orientation="vertical"
             android:padding="16dp"
-            android:orientation="vertical">
+            app:layout_constraintTop_toBottomOf="@id/headerLL">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profileImageCL"
@@ -65,12 +64,11 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/primary_yellow"
                     android:clickable="true"
-                    android:tint="@color/primary_yellow"
                     app:borderWidth="0dp"
                     app:layout_constraintBottom_toBottomOf="@id/profileImage"
                     app:layout_constraintEnd_toEndOf="@id/profileImage"
                     app:tint="@color/black"
-                    tools:srcCompat="@drawable/ic_edit" />
+                    app:srcCompat="@drawable/ic_edit" />
 
                 <ImageView
                     android:id="@+id/profileImage"
@@ -85,14 +83,14 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <EditText
-                android:id="@+id/usernameTV"
+                android:id="@+id/createRecipeUsernameTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semibold"
                 android:hint="Recipe Name"
+                android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textAlignment="center" />
+                android:textSize="18sp" />
 
 
             <LinearLayout
@@ -104,8 +102,8 @@
                     android:id="@+id/numServingsET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:height="48dp"
                     android:layout_weight="2"
+                    android:height="48dp"
                     android:ems="10"
                     android:hint="Servings"
                     android:inputType="number"
@@ -113,11 +111,11 @@
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/bioET"
+                    android:id="@+id/totalTimeET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:height="48dp"
                     android:layout_weight="1"
+                    android:height="48dp"
                     android:ems="10"
                     android:hint="Total Time to Prepare (mins)"
                     android:inputType="number"
@@ -129,9 +127,9 @@
                 android:id="@+id/ingredientsTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ingredients"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins"
+                android:text="Ingredients"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -139,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="16dp"
-                android:background="#ff000000"/>
+                android:background="#ff000000" />
 
             <LinearLayout
                 android:id="@+id/ingredientsListLL"
@@ -159,9 +157,9 @@
                 android:id="@+id/procedureTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Procedure"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins"
+                android:text="Procedure"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -169,7 +167,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="16dp"
-                android:background="#ff000000"/>
+                android:background="#ff000000" />
 
             <LinearLayout
                 android:id="@+id/proceduresListLL"
@@ -188,4 +186,5 @@
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

@@ -4,36 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
-    tools:context=".HomeFragment">
+    tools:context=".SearchableActivity">
 
-    <SearchView
-        android:id="@+id/recipeSV"
+    <LinearLayout
+        android:id="@+id/headerLL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:queryHint="Search for Recipes"
+        android:layout_height="48dp"
+        android:background="@color/primary_yellow"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </SearchView>
+
+        <ImageButton
+            android:id="@+id/searchableBackBtn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/arrow" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/recipeSV"
+        app:layout_constraintTop_toBottomOf="@id/headerLL"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/popularRecipesTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="Popular Recipes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Search Results for :"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

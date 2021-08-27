@@ -26,8 +26,6 @@ class CreateRecipeActivity : AppCompatActivity() {
         addProcedureButton = findViewById(R.id.addProcedureBtn)
         ingredientLayout = findViewById(R.id.ingredientsListLL)
         procedureLayout = findViewById(R.id.proceduresListLL)
-        deleteIngredientButton = findViewById(R.id.deleteIngredientBtn)
-        deleteProcedureButton = findViewById(R.id.deleteProcedureBtn)
 
         addIngredientButton.setOnClickListener{
             val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

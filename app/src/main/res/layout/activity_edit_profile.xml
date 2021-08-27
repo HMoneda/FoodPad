@@ -65,7 +65,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/profileImage"
                 app:layout_constraintEnd_toEndOf="@id/profileImage"
                 app:tint="@color/black"
-                tools:srcCompat="@drawable/ic_edit" />
+                app:srcCompat="@drawable/ic_edit" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileImage"
@@ -113,8 +113,7 @@
             android:inputType="textCapSentences|textMultiLine"
             android:hint="Bio"
             android:textSize="14sp"
-            android:textAlignment="textStart"
-            android:text="" />
+            android:textAlignment="textStart" />
 
         <TextView
         android:id="@+id/changePasswordHeaderTV"
