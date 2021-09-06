@@ -1,31 +1,62 @@
 package com.mobdeve.s15.mco.foodpad
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
+import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.children
+import androidx.core.view.forEach
+import androidx.core.view.iterator
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class CreateRecipeActivity : AppCompatActivity() {
 
     private lateinit var addProcedureButton : Button
     private lateinit var addIngredientButton : Button
     private lateinit var saveBtn : Button
+    private lateinit var backBtn : ImageButton
     private lateinit var ingredientLayout: LinearLayout
     private lateinit var procedureLayout: LinearLayout
     private lateinit var recipeNameET : EditText
     private lateinit var numServingsET : EditText
     private lateinit var totalTimeET : EditText
-    private lateinit var deleteIngredientButton : ImageButton
-    private lateinit var deleteProcedureButton : ImageButton
+    private lateinit var recipeImg : ImageView
+    private lateinit var editRecipeImgFAB : FloatingActionButton
 
     private val TAG = LogTags.CREATE_RECIPE_ACTIVITY.name
+
+    private var imageUri : Uri? = null
+
+    private val activityResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            try {
+                if (result.data != null) {
+                    imageUri = result.data!!.data!!
+                    Picasso.get().load(imageUri).into(recipeImg)
+                    Log.d(TAG, "Image Selected Complete")
+                }
+            } catch (err: Exception) {
+                Log.d(TAG, err.localizedMessage!!)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +70,14 @@ class CreateRecipeActivity : AppCompatActivity() {
         recipeNameET = findViewById(R.id.createRecipeUsernameTV)
         numServingsET = findViewById(R.id.numServingsET)
         totalTimeET = findViewById(R.id.totalTimeET)
+        recipeImg = findViewById(R.id.profileImage)
+        editRecipeImgFAB = findViewById(R.id.editImageFAB)
+        backBtn = findViewById(R.id.recipeBackBtn)
 
-
+        val uid = intent.getStringExtra(IntentKeys.UID_KEY.name)
+        val username = intent.getStringExtra(IntentKeys.USERNAME_KEY.name)
+        Log.d(TAG, uid!!)
+        Log.d(TAG, username!!)
         addIngredientButton.setOnClickListener{
             val ingredientView = layoutInflater.inflate(R.layout.row_ingredient,null,false)
             val deleteIngredient : ImageButton = ingredientView.findViewById(R.id.deleteIngredientBtn)
@@ -51,17 +88,76 @@ class CreateRecipeActivity : AppCompatActivity() {
         }
 
         addProcedureButton.setOnClickListener{
-            val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val row : View = inflater.inflate(R.layout.row_procedure, null)
-            procedureLayout.addView(row, procedureLayout.childCount - 1)
+            val procedureView = layoutInflater.inflate(R.layout.row_procedure, null, false)
+            val deleteProcedureBtn : ImageView = procedureView.findViewById(R.id.deleteProcedureBtn)
+
+            deleteProcedureBtn.setOnClickListener{
+                procedureLayout.removeView(procedureView)
+            }
+
+            procedureLayout.addView(procedureView)
+
+        }
+
+        editRecipeImgFAB.setOnClickListener {
+            val i = Intent()
+            i.apply {
+                type = "image/*"
+                action = Intent.ACTION_OPEN_DOCUMENT
+            }
+            activityResultLauncher.launch(Intent.createChooser(i, "Select Picture"))
         }
 
         saveBtn.setOnClickListener {
-            Log.d(TAG, "RECIPE NAME: ${recipeNameET.text}")
-            Log.d(TAG, "NUM OF SERVINGS: ${numServingsET.text}")
-            Log.d(TAG, "TOTAL TIME: ${totalTimeET.text}")
-            Log.d(TAG, ingredientLayout.getChildAt(0).findViewById<EditText>(R.id.qtyET).text.toString())
+            Log.d(TAG, "Recipe Saved!")
+            val recipeName = recipeNameET.text.toString()
+            val numServings = numServingsET.text.toString()
+            val prepTime = totalTimeET.text.toString()
+            var recipeImg : Uri? = null
+
+            val ingredients : ArrayList<Ingredient> = ArrayList()
+            val procedures : ArrayList<String> = ArrayList()
+
+            ingredientLayout.forEach { view ->
+                val qty = view.findViewById<EditText>(R.id.qtyET).text.toString()
+                val ingredient = view.findViewById<EditText>(R.id.bioET).text.toString()
+                ingredients.add(Ingredient(Integer.parseInt(qty),ingredient))
+            }
+
+            procedureLayout.forEach { view ->
+                val procedure = view.findViewById<EditText>(R.id.qtyET).text.toString()
+                procedures.add(procedure)
+            }
+
+            CoroutineScope(Dispatchers.IO).launch{
+                if(imageUri == null){
+                    recipeImg = FirestoreReferences.getDefaultAvatar().await()
+                }else{
+                    recipeImg = FirestoreReferences.getRecipePhotoUri(imageUri!!,uid!!)
+                }
+
+                Log.d(TAG, recipeName)
+                Log.d(TAG, numServings)
+                Log.d(TAG, prepTime)
+                Log.d(TAG, recipeImg.toString())
+                Log.d(TAG, ingredients.toString())
+                Log.d(TAG, procedures.toString())
+
+
+                val newRecipe = Recipe(recipeName, uid, username,0,0,numServings,
+                    Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString())
+
+                FirestoreReferences.addRecipe(newRecipe)
+
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@CreateRecipeActivity, "Recipe Created", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+            }
         }
 
+        backBtn.setOnClickListener {
+            finish()
+        }
     }
 }

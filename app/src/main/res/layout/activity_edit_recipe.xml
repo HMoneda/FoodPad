@@ -23,7 +23,7 @@
 
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/recipeBackBtn"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="center_vertical"
@@ -183,6 +183,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Add Procedure" />
+
+            <Button
+                android:id="@+id/deleteRecipeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#C62828"
+                android:text="Delete Recipe"
+                android:textColor="#FFFFFF" />
 
 
         </LinearLayout>

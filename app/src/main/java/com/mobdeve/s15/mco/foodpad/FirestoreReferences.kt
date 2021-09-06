@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Document
 
 class FirestoreReferences {
     companion object{
@@ -36,7 +37,7 @@ class FirestoreReferences {
         const val RECIPE_AUTHOR_FIELD = "author"
         const val NUM_COMMENTS_FIELD = "comments"
         const val NUM_LIKES_FIELD = "likes"
-        const val USER_FIELD = "user"
+        const val USER_FIELD = "userID"
 
         fun getFirestoreInstance() : FirebaseFirestore{
             if(db == null){
@@ -98,8 +99,35 @@ class FirestoreReferences {
             return getRecipeCollectionReference().whereEqualTo(USER_FIELD, uid)
         }
 
+        fun addRecipe(newRecipe: Recipe) : Task<DocumentReference>{
+            return getRecipeCollectionReference().add(newRecipe)
+        }
+
+        fun getRecipe(recipeID : String) : Task<DocumentSnapshot> {
+            return getRecipeCollectionReference().document(recipeID).get()
+        }
+
+        fun updateRecipe(recipeID: String, recipe: Recipe) {
+            getRecipeCollectionReference().document(recipeID).set(recipe)
+        }
+
+        fun deleteRecipe(recipeID: String){
+            getRecipeCollectionReference().document(recipeID).delete()
+        }
+
         fun generateUserProfilePath(uid: String) : String{
             return "images/users/${uid}-ProfileAvatar"
+        }
+
+        fun generateRecipePhotoPath(uid : String, imageUri : Uri) : String{
+            return "images/recipes/${uid}-${imageUri.lastPathSegment}"
+        }
+
+        suspend fun getRecipePhotoUri(imageUri : Uri, uid : String) : Uri{
+            val path = generateRecipePhotoPath(uid, imageUri)
+            getStorageReferenceInstance().child(path).putFile(imageUri).await()
+
+            return getStorageReferenceInstance().child(path).downloadUrl.await()
         }
 
         fun generateUserPhotoPath(uid: String, imageUri : Uri) : String{
@@ -110,5 +138,6 @@ class FirestoreReferences {
             val path = "images/users/DefaultAvatar.png"
             return getStorageReferenceInstance().child(path).downloadUrl
         }
+
     }
 }

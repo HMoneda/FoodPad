@@ -77,6 +77,8 @@ class LoginActivity : AppCompatActivity() {
                             i.putExtra(IntentKeys.PROFILE_URI_KEY.name,
                                 res.documents[0].toObject(User::class.java)?.imgUri
                             )
+                            i.putExtra(IntentKeys.USERNAME_KEY.name,
+                                res.documents[0].toObject(User::class.java)?.username)
                             startActivity(i)
                             finish()
                         }
@@ -144,6 +146,8 @@ class LoginActivity : AppCompatActivity() {
                             putExtra(IntentKeys.EMAIL_KEY.name, account.email)
                             putExtra(IntentKeys.UID_KEY.name, res.documents[0].id)
                             putExtra(IntentKeys.PROFILE_URI_KEY.name, account.photoUrl!!.toString())
+                            putExtra(IntentKeys.USERNAME_KEY.name,
+                                res.documents[0].toObject(User::class.java)?.username)
                         }
                         startActivity(i)
                         finish()

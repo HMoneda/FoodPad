@@ -65,6 +65,8 @@ class NewGoogleLoginActivity : AppCompatActivity() {
                             putExtra(IntentKeys.EMAIL_KEY.name, email)
                             putExtra(IntentKeys.UID_KEY.name, res.id)
                             putExtra(IntentKeys.PROFILE_URI_KEY.name, profileUri)
+                            putExtra(IntentKeys.USERNAME_KEY.name, username)
+
                         }
                         startActivity(i)
                         finish()

@@ -36,6 +36,10 @@ class HomeActivity : AppCompatActivity() {
         logoutButton = findViewById(R.id.logoutBtn)
         logoutButton.isVisible = false
 
+        val uid = intent.getStringExtra(IntentKeys.UID_KEY.name)
+        val username = intent.getStringExtra(IntentKeys.USERNAME_KEY.name)
+        Log.d(TAG, uid!!)
+        Log.d(TAG, username!!)
         var bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.menu.getItem(0).isCheckable = true
         setFragment(HomeFragment())
@@ -69,6 +73,10 @@ class HomeActivity : AppCompatActivity() {
         createRecipeButton.setOnClickListener {
             Log.d(TAG, "Create Recipe Clicked!")
             val intent = Intent(this, CreateRecipeActivity::class.java)
+            intent.apply {
+                putExtra(IntentKeys.UID_KEY.name, uid)
+                putExtra(IntentKeys.USERNAME_KEY.name, username)
+            }
             startActivity(intent)
         }
 
