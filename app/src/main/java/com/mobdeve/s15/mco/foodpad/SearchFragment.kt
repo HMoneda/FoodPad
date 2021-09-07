@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -13,8 +16,35 @@ private const val ARG_PARAM2 = "param2"
 
 class SearchFragment : Fragment() {
 
+    private lateinit var popularRecipesRV : RecyclerView
+    private lateinit var recipeAdapter: HomeAdapter
+
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_search , container , false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        popularRecipesRV = view.findViewById(R.id.popularRecipesRV)
+
+        val query = FirestoreReferences.getPopularRecipesQuery()
+
+        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
+
+        recipeAdapter = HomeAdapter(fireStoreRecipeRecyclerOptions)
+        popularRecipesRV.adapter = recipeAdapter
+        popularRecipesRV.layoutManager = LinearLayoutManager(this.context)
+    }
+
+    override fun onStart(){
+        super.onStart()
+        recipeAdapter.startListening()
+    }
+
+    override fun onStop(){
+        super.onStop()
+        recipeAdapter.stopListening()
+        recipeAdapter.notifyDataSetChanged()
     }
 
 }

@@ -115,6 +115,10 @@ class FirestoreReferences {
             getRecipeCollectionReference().document(recipeID).delete()
         }
 
+        fun getPopularRecipesQuery() : Query{
+            return getRecipeCollectionReference().orderBy(NUM_LIKES_FIELD, Query.Direction.DESCENDING).limit(5)
+        }
+
         fun generateUserProfilePath(uid: String) : String{
             return "images/users/${uid}-ProfileAvatar"
         }

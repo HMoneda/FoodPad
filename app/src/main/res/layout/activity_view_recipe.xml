@@ -40,7 +40,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/profileImage"
+                android:id="@+id/recipeImage"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:layout_gravity="center"
@@ -134,7 +134,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/numServingsET"
+                android:id="@+id/numServingsTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Servings: 4"
@@ -143,7 +143,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/bioET"
+                android:id="@+id/prepTimeTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Preparation time: 100 mins."

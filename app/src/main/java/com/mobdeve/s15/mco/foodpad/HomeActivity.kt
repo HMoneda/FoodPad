@@ -74,7 +74,7 @@ class HomeActivity : AppCompatActivity() {
             Log.d(TAG, "Create Recipe Clicked!")
             val intent = Intent(this, CreateRecipeActivity::class.java)
             intent.apply {
-                putExtra(IntentKeys.UID_KEY.name, uid)
+                putExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name, uid)
                 putExtra(IntentKeys.USERNAME_KEY.name, username)
             }
             startActivity(intent)

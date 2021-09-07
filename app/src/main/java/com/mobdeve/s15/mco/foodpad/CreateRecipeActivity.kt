@@ -74,7 +74,7 @@ class CreateRecipeActivity : AppCompatActivity() {
         editRecipeImgFAB = findViewById(R.id.editImageFAB)
         backBtn = findViewById(R.id.recipeBackBtn)
 
-        val uid = intent.getStringExtra(IntentKeys.UID_KEY.name)
+        val uid = intent.getStringExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name)
         val username = intent.getStringExtra(IntentKeys.USERNAME_KEY.name)
         Log.d(TAG, uid!!)
         Log.d(TAG, username!!)
@@ -133,7 +133,7 @@ class CreateRecipeActivity : AppCompatActivity() {
                 if(imageUri == null){
                     recipeImg = FirestoreReferences.getDefaultAvatar().await()
                 }else{
-                    recipeImg = FirestoreReferences.getRecipePhotoUri(imageUri!!,uid!!)
+                    recipeImg = FirestoreReferences.getRecipePhotoUri(imageUri!!, uid)
                 }
 
                 Log.d(TAG, recipeName)

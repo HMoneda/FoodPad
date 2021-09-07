@@ -1,5 +1,7 @@
 package com.mobdeve.s15.mco.foodpad
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.media.Image
 import android.net.Uri
@@ -23,13 +25,25 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
         var numComments: TextView = itemView.findViewById(R.id.numCommentsTV)
         var recipeImg : ImageView = itemView.findViewById(R.id.recipeImageIV)
 
-        fun editRecipe(model : Recipe){
+        fun checkOwnership(model : Recipe){
+            val user = (itemView.context as Activity).intent.getStringExtra(IntentKeys.UID_KEY.name)
+            Log.d("HOME ADAPTER", "LOGGED IN: ${user!!}")
+            Log.d("HOME ADAPTER", "OWNER: ${model.userID}")
+        }
+
+        fun viewRecipe(model : Recipe){
             itemView.setOnClickListener {
-                val i = Intent(itemView.context, EditRecipeActivity::class.java)
+                val loggedIn = (itemView.context as Activity).intent.getStringExtra(IntentKeys.UID_KEY.name)
+                val i = Intent(itemView.context, ViewRecipeActivity::class.java)
                 i.putExtra(IntentKeys.RECIPE_ID_KEY.name, model.recipeID)
-                i.putExtra(IntentKeys.UID_KEY.name, model.userID)
+                i.putExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name, model.userID)
                 i.putExtra(IntentKeys.USERNAME_KEY.name, model.author)
                 i.putExtra(IntentKeys.RECIPE_IMG_URI_KEY.name, model.recipeImg)
+                if(loggedIn == model.userID){
+                    i.putExtra(IntentKeys.RECIPE_EDITABLE_KEY.name, true)
+                }else{
+                    i.putExtra(IntentKeys.RECIPE_EDITABLE_KEY.name, false)
+                }
                 itemView.context.startActivity(i)
             }
         }
@@ -46,7 +60,8 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
         holder.numLikes.text = model.likes.toString()
         holder.numComments.text = model.comments.toString()
         Picasso.get().load(Uri.parse(model.recipeImg)).into(holder.recipeImg)
-        holder.editRecipe(model)
+        holder.checkOwnership(model)
+        holder.viewRecipe(model)
     }
 
 

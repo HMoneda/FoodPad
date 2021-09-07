@@ -37,6 +37,7 @@ class EditRecipeActivity : AppCompatActivity() {
     private val TAG = LogTags.CREATE_RECIPE_ACTIVITY.name
 
     private var imageUri : Uri? = null
+    var dataBinded = false
 
     private val activityResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -72,7 +73,7 @@ class EditRecipeActivity : AppCompatActivity() {
         deleteRecipeBtn = findViewById(R.id.deleteRecipeBtn)
 
         val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)
-        val uid = intent.getStringExtra(IntentKeys.UID_KEY.name)
+        val uid = intent.getStringExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name)
         val username = intent.getStringExtra(IntentKeys.USERNAME_KEY.name)
         val recipeImgUri = intent.getStringExtra(IntentKeys.RECIPE_IMG_URI_KEY.name)
 
@@ -168,25 +169,24 @@ class EditRecipeActivity : AppCompatActivity() {
             finish()
         }
 
-        getData(recipeID!!)
+
     }
 
     override fun onStart() {
         super.onStart()
         val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)
-        CoroutineScope(Dispatchers.IO).launch {
-            val recipe = FirestoreReferences.getRecipe(recipeID!!).await().toObject(Recipe::class.java)
-            withContext(Dispatchers.Main){
-                getIngredientsAndProcedures(recipe!!)
-            }
-        }
+        getData(recipeID!!)
     }
 
     private fun getData(recipeID : String){
         CoroutineScope(Dispatchers.IO).launch {
             val recipe = FirestoreReferences.getRecipe(recipeID!!).await().toObject(Recipe::class.java)
             withContext(Dispatchers.Main){
-                bindData(recipe!!)
+                if(!dataBinded){
+                    bindData(recipe!!)
+                    dataBinded = true
+                }
+                getIngredientsAndProcedures(recipe!!)
             }
         }
     }
