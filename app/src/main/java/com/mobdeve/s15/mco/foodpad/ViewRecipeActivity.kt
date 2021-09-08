@@ -28,6 +28,8 @@ class ViewRecipeActivity : AppCompatActivity() {
     private lateinit var numServingsTV : TextView
     private lateinit var prepTimeTV : TextView
     private lateinit var backBtn : ImageButton
+    private lateinit var likeBtn : ImageButton
+    private lateinit var commentBtn : ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,8 @@ class ViewRecipeActivity : AppCompatActivity() {
         numServingsTV = findViewById(R.id.numServingsTV)
         prepTimeTV = findViewById(R.id.prepTimeTV)
         backBtn = findViewById(R.id.recipeBackBtn)
+        likeBtn = findViewById(R.id.likeBtn)
+        commentBtn = findViewById(R.id.commentBtn)
 
         val uid = intent.getStringExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name)
         val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)

@@ -1,20 +1,16 @@
 package com.mobdeve.s15.mco.foodpad
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.children
 import androidx.core.view.forEach
-import androidx.core.view.iterator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +33,7 @@ class CreateRecipeActivity : AppCompatActivity() {
     private lateinit var totalTimeET : EditText
     private lateinit var recipeImg : ImageView
     private lateinit var editRecipeImgFAB : FloatingActionButton
+    private lateinit var classificationSpinner: Spinner
 
     private val TAG = LogTags.CREATE_RECIPE_ACTIVITY.name
 
@@ -73,13 +70,29 @@ class CreateRecipeActivity : AppCompatActivity() {
         recipeImg = findViewById(R.id.profileImage)
         editRecipeImgFAB = findViewById(R.id.editImageFAB)
         backBtn = findViewById(R.id.recipeBackBtn)
+        classificationSpinner = findViewById(R.id.classificationSpinner)
+
+        val classifications = arrayOf("Appetizer", "Main Course", "Dessert", "Beverage")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classifications)
+        classificationSpinner.adapter = adapter
+
+        classificationSpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>,
+                                        view: View, position: Int, id: Long) {
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
 
         val uid = intent.getStringExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name)
         val username = intent.getStringExtra(IntentKeys.USERNAME_KEY.name)
         Log.d(TAG, uid!!)
         Log.d(TAG, username!!)
         addIngredientButton.setOnClickListener{
-            val ingredientView = layoutInflater.inflate(R.layout.row_ingredient,null,false)
+            val ingredientView = layoutInflater.inflate(R.layout.edittext_row_ingredient,null,false)
             val deleteIngredient : ImageButton = ingredientView.findViewById(R.id.deleteIngredientBtn)
             deleteIngredient.setOnClickListener {
                 ingredientLayout.removeView(ingredientView)
@@ -88,7 +101,7 @@ class CreateRecipeActivity : AppCompatActivity() {
         }
 
         addProcedureButton.setOnClickListener{
-            val procedureView = layoutInflater.inflate(R.layout.row_procedure, null, false)
+            val procedureView = layoutInflater.inflate(R.layout.edittext_row_procedure, null, false)
             val deleteProcedureBtn : ImageView = procedureView.findViewById(R.id.deleteProcedureBtn)
 
             deleteProcedureBtn.setOnClickListener{

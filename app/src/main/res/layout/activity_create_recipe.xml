@@ -102,9 +102,8 @@
                     android:id="@+id/numServingsET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="2.5"
                     android:height="48dp"
-                    android:ems="10"
                     android:hint="Servings"
                     android:inputType="number"
                     android:textAlignment="textStart"
@@ -114,13 +113,19 @@
                     android:id="@+id/totalTimeET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:height="48dp"
                     android:ems="10"
-                    android:hint="Total Time to Prepare (mins)"
+                    android:hint="Total Time (mins)"
                     android:inputType="number"
                     android:textAlignment="textStart"
                     android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/classificationSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5" />
             </LinearLayout>
 
             <TextView

@@ -2,11 +2,11 @@ package com.mobdeve.s15.mco.foodpad
 
 import android.app.Activity
 import android.content.Intent
-import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -33,6 +33,7 @@ class EditRecipeActivity : AppCompatActivity() {
     private lateinit var totalTimeET : EditText
     private lateinit var recipeImg : ImageView
     private lateinit var editRecipeImgFAB : FloatingActionButton
+    private lateinit var editClassificationSpinner : Spinner
 
     private val TAG = LogTags.CREATE_RECIPE_ACTIVITY.name
 
@@ -71,6 +72,22 @@ class EditRecipeActivity : AppCompatActivity() {
         editRecipeImgFAB = findViewById(R.id.editImageFAB)
         backBtn = findViewById(R.id.recipeBackBtn)
         deleteRecipeBtn = findViewById(R.id.deleteRecipeBtn)
+        editClassificationSpinner = findViewById(R.id.editClassificationSpinner)
+
+        val classifications = arrayOf("Appetizer", "Main Course", "Dessert", "Beverage")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classifications)
+        editClassificationSpinner.adapter = adapter
+
+        editClassificationSpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>,
+                                        view: View, position: Int, id: Long) {
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
 
         val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)
         val uid = intent.getStringExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name)
@@ -87,7 +104,7 @@ class EditRecipeActivity : AppCompatActivity() {
         }
 
         addIngredientButton.setOnClickListener{
-            val ingredientView = layoutInflater.inflate(R.layout.row_ingredient,null,false)
+            val ingredientView = layoutInflater.inflate(R.layout.edittext_row_ingredient,null,false)
             val deleteIngredient : ImageButton = ingredientView.findViewById(R.id.deleteIngredientBtn)
             deleteIngredient.setOnClickListener {
                 ingredientLayout.removeView(ingredientView)
@@ -96,7 +113,7 @@ class EditRecipeActivity : AppCompatActivity() {
         }
 
         addProcedureButton.setOnClickListener{
-            val procedureView = layoutInflater.inflate(R.layout.row_procedure, null, false)
+            val procedureView = layoutInflater.inflate(R.layout.edittext_row_procedure, null, false)
             val deleteProcedureBtn : ImageView = procedureView.findViewById(R.id.deleteProcedureBtn)
 
             deleteProcedureBtn.setOnClickListener{
@@ -200,7 +217,7 @@ class EditRecipeActivity : AppCompatActivity() {
 
     private fun getIngredientsAndProcedures(recipe: Recipe){
         for(ingredient in recipe.ingredients){
-            val ingredientView = layoutInflater.inflate(R.layout.row_ingredient,null,false)
+            val ingredientView = layoutInflater.inflate(R.layout.edittext_row_ingredient,null,false)
             val deleteIngredient : ImageButton = ingredientView.findViewById(R.id.deleteIngredientBtn)
             ingredientView.findViewById<EditText>(R.id.qtyET).setText(ingredient.quantity.toString())
             ingredientView.findViewById<EditText>(R.id.bioET).setText(ingredient.ingredient)
@@ -211,7 +228,7 @@ class EditRecipeActivity : AppCompatActivity() {
         }
 
         for(procedure in recipe.procedures){
-            val procedureView = layoutInflater.inflate(R.layout.row_procedure, null, false)
+            val procedureView = layoutInflater.inflate(R.layout.edittext_row_procedure, null, false)
             val deleteProcedureBtn : ImageView = procedureView.findViewById(R.id.deleteProcedureBtn)
             procedureView.findViewById<EditText>(R.id.qtyET).setText(procedure)
             deleteProcedureBtn.setOnClickListener{

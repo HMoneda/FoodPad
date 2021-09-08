@@ -11,6 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodPad">
         <activity
+            android:name=".ViewOtherProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CommentActivity"
+            android:exported="true" />
+        <activity
             android:name=".SearchableActivity"
             android:exported="true" />
         <activity

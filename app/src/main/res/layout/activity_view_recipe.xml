@@ -80,11 +80,11 @@
             android:orientation="horizontal">
 
 
-            <ImageView
-                android:id="@+id/likeIV"
+            <ImageButton
+                android:id="@+id/likeBtn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                app:srcCompat="@drawable/ic_heart" />
+                android:background="@drawable/ic_heart" />
 
             <TextView
                 android:id="@+id/numLikesTV"
@@ -96,12 +96,12 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <ImageView
-                android:id="@+id/commentIV"
+            <ImageButton
+                android:id="@+id/commentBtn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="12dp"
-                app:srcCompat="@drawable/ic_comment" />
+                android:background="@drawable/ic_comment" />
 
             <TextView
                 android:id="@+id/numCommentsTV"
@@ -173,18 +173,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:background="#ff000000" />
 
-        <LinearLayout
-            android:id="@+id/viewIngredientsListLL"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ingredientsRV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"/>
 
-
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/procedureTV"
@@ -199,16 +195,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:background="#ff000000" />
 
-        <LinearLayout
-            android:id="@+id/proceduresListLL"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/proceduresRV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:layout_height="wrap_content"/>
 
 
 
