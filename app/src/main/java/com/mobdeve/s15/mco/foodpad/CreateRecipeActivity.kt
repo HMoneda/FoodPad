@@ -157,7 +157,8 @@ class CreateRecipeActivity : AppCompatActivity() {
                 Log.d(TAG, procedures.toString())
 
 
-                val newRecipe = Recipe(recipeName, uid, username,0,0,numServings,
+                val newRecipe = Recipe(recipeName, uid, username,
+                    ArrayList(),ArrayList(),numServings,
                     Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(), classification)
 
                 FirestoreReferences.addRecipe(newRecipe)

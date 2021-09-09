@@ -26,20 +26,16 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
         var recipeImg : ImageView = itemView.findViewById(R.id.recipeImageIV)
         var classificationIV : ImageView = itemView.findViewById(R.id.classificationIV)
 
-        fun checkOwnership(model : Recipe){
-            val user = (itemView.context as Activity).intent.getStringExtra(IntentKeys.UID_KEY.name)
-            Log.d("HOME ADAPTER", "LOGGED IN: ${user!!}")
-            Log.d("HOME ADAPTER", "OWNER: ${model.userID}")
-        }
-
         fun viewRecipe(model : Recipe){
             itemView.setOnClickListener {
                 val loggedIn = (itemView.context as Activity).intent.getStringExtra(IntentKeys.UID_KEY.name)
+                Log.d("TEST", loggedIn!!)
                 val i = Intent(itemView.context, ViewRecipeActivity::class.java)
                 i.putExtra(IntentKeys.RECIPE_ID_KEY.name, model.recipeID)
                 i.putExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name, model.userID)
                 i.putExtra(IntentKeys.USERNAME_KEY.name, model.author)
                 i.putExtra(IntentKeys.RECIPE_IMG_URI_KEY.name, model.recipeImg)
+                i.putExtra(IntentKeys.UID_KEY.name, loggedIn)
                 if(loggedIn == model.userID){
                     i.putExtra(IntentKeys.RECIPE_EDITABLE_KEY.name, true)
                 }else{
@@ -75,11 +71,10 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Recipe) {
         holder.recipeName.text = model.recipeName
         holder.recipeAuthor.text = model.author
-        holder.numLikes.text = model.likes.toString()
-        holder.numComments.text = model.comments.toString()
+        holder.numLikes.text = model.likes.size.toString()
+        holder.numComments.text = model.comments.size.toString()
         Picasso.get().load(Uri.parse(model.recipeImg)).into(holder.recipeImg)
         holder.setClassification(model.classification)
-        holder.checkOwnership(model)
         holder.viewRecipe(model)
     }
 

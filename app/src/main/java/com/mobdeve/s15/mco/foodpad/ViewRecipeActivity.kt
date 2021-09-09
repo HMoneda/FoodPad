@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.core.view.isVisible
 import com.squareup.picasso.Picasso
@@ -48,6 +49,7 @@ class ViewRecipeActivity : AppCompatActivity() {
         viewIngredientLayout = findViewById(R.id.viewIngredientListLL)
         viewProcedureLayout = findViewById(R.id.viewProcedureListLL)
 
+        val loggedIn = intent.getStringExtra(IntentKeys.UID_KEY.name)
         val uid = intent.getStringExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name)
         val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)
         val username = intent.getStringExtra(IntentKeys.USERNAME_KEY.name)
@@ -63,6 +65,10 @@ class ViewRecipeActivity : AppCompatActivity() {
             i.putExtra(IntentKeys.USERNAME_KEY.name, username)
             i.putExtra(IntentKeys.RECIPE_IMG_URI_KEY.name, recipeImgUri)
             startActivity(i)
+        }
+
+        likeBtn.setOnClickListener {
+            likeRecipe(recipeID!!, loggedIn!!)
         }
 
         backBtn.setOnClickListener {
@@ -86,9 +92,12 @@ class ViewRecipeActivity : AppCompatActivity() {
     }
 
     private fun bindData(recipe : Recipe){
+
+        val loggedIn = intent.getStringExtra(IntentKeys.UID_KEY.name)
+
         recipeName.text = recipe.recipeName
-        numLikesTV.text = recipe.likes.toString()
-        numCommentsTV.text = recipe.comments.toString()
+        numLikesTV.text = recipe.likes.size.toString()
+        numCommentsTV.text = recipe.comments.size.toString()
         numServingsTV.text = "Servings: ${recipe.servings}"
         prepTimeTV.text = "Preparation time: ${recipe.prepTime} min/s"
         Picasso.get().load(Uri.parse(recipe.recipeImg)).into(recipeImg)
@@ -107,6 +116,12 @@ class ViewRecipeActivity : AppCompatActivity() {
                 classification.setImageResource(R.drawable.ic_beverage)
             }
         }
+        if(loggedIn in recipe.likes){
+            likeBtn.setBackgroundResource(R.drawable.ic_heart)
+        }else{
+            Log.d("TEST", "Not Liked")
+            likeBtn.setBackgroundResource(R.drawable.heart_outline)
+        }
 
         for(ingredient in recipe.ingredients){
             val ingredientView = layoutInflater.inflate(R.layout.ingredient_layout,null,false)
@@ -121,6 +136,27 @@ class ViewRecipeActivity : AppCompatActivity() {
             val procedureInfo : TextView = procedureView.findViewById(R.id.procedureTV)
             procedureInfo.text = "Step ${i}: ${procedure}"
             viewProcedureLayout.addView(procedureView)
+            i++
+        }
+    }
+
+    private fun likeRecipe(recipeID: String, userID : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val recipe = FirestoreReferences.getRecipe(recipeID).await().toObject(Recipe::class.java)
+            if(userID in recipe!!.likes){
+                recipe.likes.remove(userID)
+            }else{
+                recipe.likes.add(userID)
+            }
+            FirestoreReferences.likeRecipe(recipeID, recipe.likes)
+            withContext(Dispatchers.Main){
+                numLikesTV.text = recipe.likes.size.toString()
+                if(userID in recipe.likes){
+                    likeBtn.setBackgroundResource(R.drawable.ic_heart)
+                }else{
+                    likeBtn.setBackgroundResource(R.drawable.heart_outline)
+                }
+            }
         }
     }
 

@@ -1,6 +1,8 @@
 package com.mobdeve.s15.mco.foodpad
 
 import android.net.Uri
+import android.service.autofill.FieldClassification
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -33,11 +35,12 @@ class FirestoreReferences {
         const val PROFILE_URI_FIELD = "imgUri"
         const val FOLLOWING_FIELD = "following"
         const val FOLLOWERS_FIELD = "followers"
-        const val RECIPE_NAME_FIELD = "name"
+        const val RECIPE_NAME_FIELD = "recipeName"
         const val RECIPE_AUTHOR_FIELD = "author"
         const val NUM_COMMENTS_FIELD = "comments"
         const val NUM_LIKES_FIELD = "likes"
         const val USER_FIELD = "userID"
+        const val RECIPE_CLASSIFICATION_FIELD = "classification"
 
         fun getFirestoreInstance() : FirebaseFirestore{
             if(db == null){
@@ -113,6 +116,15 @@ class FirestoreReferences {
 
         fun deleteRecipe(recipeID: String){
             getRecipeCollectionReference().document(recipeID).delete()
+        }
+
+        fun findRecipe(recipeName : String) : Query{
+            Log.d("TEST", recipeName)
+            return getRecipeCollectionReference().orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
+        }
+
+        fun likeRecipe(recipeID: String, likes : ArrayList<String>){
+            getRecipeCollectionReference().document(recipeID).update(NUM_LIKES_FIELD, likes)
         }
 
         fun getPopularRecipesQuery() : Query{
