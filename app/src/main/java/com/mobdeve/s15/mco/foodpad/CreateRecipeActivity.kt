@@ -78,11 +78,9 @@ class CreateRecipeActivity : AppCompatActivity() {
 
         classificationSpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>,
-                                        view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
 
             }
-
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
@@ -127,6 +125,7 @@ class CreateRecipeActivity : AppCompatActivity() {
             val numServings = numServingsET.text.toString()
             val prepTime = totalTimeET.text.toString()
             var recipeImg : Uri? = null
+            val classification = classificationSpinner.selectedItem.toString()
 
             val ingredients : ArrayList<Ingredient> = ArrayList()
             val procedures : ArrayList<String> = ArrayList()
@@ -134,7 +133,8 @@ class CreateRecipeActivity : AppCompatActivity() {
             ingredientLayout.forEach { view ->
                 val qty = view.findViewById<EditText>(R.id.qtyET).text.toString()
                 val ingredient = view.findViewById<EditText>(R.id.bioET).text.toString()
-                ingredients.add(Ingredient(Integer.parseInt(qty),ingredient))
+                val measurement = view.findViewById<EditText>(R.id.measurementET).text.toString()
+                ingredients.add(Ingredient(Integer.parseInt(qty),ingredient, measurement))
             }
 
             procedureLayout.forEach { view ->
@@ -158,7 +158,7 @@ class CreateRecipeActivity : AppCompatActivity() {
 
 
                 val newRecipe = Recipe(recipeName, uid, username,0,0,numServings,
-                    Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString())
+                    Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(), classification)
 
                 FirestoreReferences.addRecipe(newRecipe)
 

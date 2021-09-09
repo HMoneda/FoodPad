@@ -38,7 +38,8 @@ class EditRecipeActivity : AppCompatActivity() {
     private val TAG = LogTags.CREATE_RECIPE_ACTIVITY.name
 
     private var imageUri : Uri? = null
-    var dataBinded = false
+    private var dataBinded = false
+    private val classifications = arrayOf("Appetizer", "Main Course", "Dessert", "Beverage")
 
     private val activityResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -67,14 +68,13 @@ class EditRecipeActivity : AppCompatActivity() {
         saveBtn = findViewById(R.id.saveBtn)
         recipeNameET = findViewById(R.id.usernameTV)
         numServingsET = findViewById(R.id.numServingsET)
-        totalTimeET = findViewById(R.id.bioET)
+        totalTimeET = findViewById(R.id.totalTimeET)
         recipeImg = findViewById(R.id.profileImage)
         editRecipeImgFAB = findViewById(R.id.editImageFAB)
         backBtn = findViewById(R.id.recipeBackBtn)
         deleteRecipeBtn = findViewById(R.id.deleteRecipeBtn)
         editClassificationSpinner = findViewById(R.id.editClassificationSpinner)
 
-        val classifications = arrayOf("Appetizer", "Main Course", "Dessert", "Beverage")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, classifications)
         editClassificationSpinner.adapter = adapter
 
@@ -129,6 +129,7 @@ class EditRecipeActivity : AppCompatActivity() {
             val numServings = numServingsET.text.toString()
             val prepTime = totalTimeET.text.toString()
             var recipeImg : Uri? = null
+            val classification = editClassificationSpinner.selectedItem.toString()
 
             val ingredients : ArrayList<Ingredient> = ArrayList()
             val procedures : ArrayList<String> = ArrayList()
@@ -136,7 +137,8 @@ class EditRecipeActivity : AppCompatActivity() {
             ingredientLayout.forEach { view ->
                 val qty = view.findViewById<EditText>(R.id.qtyET).text.toString()
                 val ingredient = view.findViewById<EditText>(R.id.bioET).text.toString()
-                ingredients.add(Ingredient(Integer.parseInt(qty),ingredient))
+                val measurement = view.findViewById<EditText>(R.id.measurementET).text.toString()
+                ingredients.add(Ingredient(Integer.parseInt(qty),ingredient, measurement))
             }
 
             procedureLayout.forEach { view ->
@@ -160,7 +162,7 @@ class EditRecipeActivity : AppCompatActivity() {
 
 
                 val updatedRecipe = Recipe(recipeName, uid!!, username!!,0,0,numServings,
-                    Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString())
+                    Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(),classification)
 
                 FirestoreReferences.updateRecipe(recipeID!!, updatedRecipe)
 
@@ -212,6 +214,7 @@ class EditRecipeActivity : AppCompatActivity() {
         recipeNameET.setText(recipe.recipeName)
         numServingsET.setText(recipe.servings)
         totalTimeET.setText(recipe.prepTime.toString())
+        editClassificationSpinner.setSelection(classifications.indexOf(recipe.classification))
         Picasso.get().load(Uri.parse(recipe.recipeImg)).into(recipeImg)
     }
 
@@ -221,6 +224,7 @@ class EditRecipeActivity : AppCompatActivity() {
             val deleteIngredient : ImageButton = ingredientView.findViewById(R.id.deleteIngredientBtn)
             ingredientView.findViewById<EditText>(R.id.qtyET).setText(ingredient.quantity.toString())
             ingredientView.findViewById<EditText>(R.id.bioET).setText(ingredient.ingredient)
+            ingredientView.findViewById<EditText>(R.id.measurementET).setText(ingredient.measurement)
             deleteIngredient.setOnClickListener {
                 ingredientLayout.removeView(ingredientView)
             }

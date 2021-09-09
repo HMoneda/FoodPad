@@ -5,10 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isVisible
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +27,8 @@ class ViewRecipeActivity : AppCompatActivity() {
     private lateinit var backBtn : ImageButton
     private lateinit var likeBtn : ImageButton
     private lateinit var commentBtn : ImageButton
+    private lateinit var viewIngredientLayout : LinearLayout
+    private lateinit var viewProcedureLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,8 @@ class ViewRecipeActivity : AppCompatActivity() {
         backBtn = findViewById(R.id.recipeBackBtn)
         likeBtn = findViewById(R.id.likeBtn)
         commentBtn = findViewById(R.id.commentBtn)
+        viewIngredientLayout = findViewById(R.id.viewIngredientListLL)
+        viewProcedureLayout = findViewById(R.id.viewProcedureListLL)
 
         val uid = intent.getStringExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name)
         val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)
@@ -89,7 +90,43 @@ class ViewRecipeActivity : AppCompatActivity() {
         numLikesTV.text = recipe.likes.toString()
         numCommentsTV.text = recipe.comments.toString()
         numServingsTV.text = "Servings: ${recipe.servings}"
-        prepTimeTV.text = "Preparation time: ${recipe.prepTime}"
+        prepTimeTV.text = "Preparation time: ${recipe.prepTime} min/s"
         Picasso.get().load(Uri.parse(recipe.recipeImg)).into(recipeImg)
+
+        when (recipe.classification) {
+            "Appetizer" -> {
+                classification.setImageResource(R.drawable.ic_appetizer)
+            }
+            "Dessert" -> {
+                classification.setImageResource(R.drawable.ic_dessert)
+            }
+            "Main Course" -> {
+                classification.setImageResource(R.drawable.ic_main_course)
+            }
+            "Beverage" -> {
+                classification.setImageResource(R.drawable.ic_beverage)
+            }
+        }
+
+        for(ingredient in recipe.ingredients){
+            val ingredientView = layoutInflater.inflate(R.layout.ingredient_layout,null,false)
+            val ingredientInfo : TextView = ingredientView.findViewById(R.id.ingredientTV)
+            ingredientInfo.text = "${ingredient.quantity} ${ingredient.measurement} ${ingredient.ingredient}"
+            viewIngredientLayout.addView(ingredientView)
+        }
+
+        var i = 1
+        for(procedure in recipe.procedures){
+            val procedureView = layoutInflater.inflate(R.layout.procedure_layout,null,false)
+            val procedureInfo : TextView = procedureView.findViewById(R.id.procedureTV)
+            procedureInfo.text = "Step ${i}: ${procedure}"
+            viewProcedureLayout.addView(procedureView)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewIngredientLayout.removeAllViews()
+        viewProcedureLayout.removeAllViews()
     }
 }

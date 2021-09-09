@@ -24,6 +24,7 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
         var numLikes: TextView = itemView.findViewById(R.id.numLikesTV)
         var numComments: TextView = itemView.findViewById(R.id.numCommentsTV)
         var recipeImg : ImageView = itemView.findViewById(R.id.recipeImageIV)
+        var classificationIV : ImageView = itemView.findViewById(R.id.classificationIV)
 
         fun checkOwnership(model : Recipe){
             val user = (itemView.context as Activity).intent.getStringExtra(IntentKeys.UID_KEY.name)
@@ -47,6 +48,23 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
                 itemView.context.startActivity(i)
             }
         }
+
+        fun setClassification(classification : String){
+            when (classification) {
+                "Appetizer" -> {
+                    classificationIV.setImageResource(R.drawable.ic_appetizer)
+                }
+                "Dessert" -> {
+                    classificationIV.setImageResource(R.drawable.ic_dessert)
+                }
+                "Main Course" -> {
+                    classificationIV.setImageResource(R.drawable.ic_main_course)
+                }
+                "Beverage" -> {
+                    classificationIV.setImageResource(R.drawable.ic_beverage)
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeAdapter.ViewHolder {
@@ -60,6 +78,7 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
         holder.numLikes.text = model.likes.toString()
         holder.numComments.text = model.comments.toString()
         Picasso.get().load(Uri.parse(model.recipeImg)).into(holder.recipeImg)
+        holder.setClassification(model.classification)
         holder.checkOwnership(model)
         holder.viewRecipe(model)
     }
