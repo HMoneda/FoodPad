@@ -25,58 +25,65 @@
             android:layout_marginLeft="12dp"
             android:background="@drawable/arrow" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/searchResultsLL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/headerLL">
-
         <TextView
             android:id="@+id/searchItemTV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:text="Search Results for :"
+            android:text="Results for:"
             android:textColor="@color/black"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
             android:textSize="18sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins"
-                android:text="Filter by"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-            <Spinner
-                android:id="@+id/filterClassificationSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-        </LinearLayout>
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchResultsRV"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/filterTL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        app:tabMode="scrollable"
+        app:layout_constraintTop_toBottomOf="@id/headerLL">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recipes" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appetizer" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Main Course" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dessert" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beverage" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/searchVP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchResultsLL" />
+        app:layout_constraintTop_toBottomOf="@id/filterTL" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

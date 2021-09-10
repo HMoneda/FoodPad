@@ -123,6 +123,22 @@ class FirestoreReferences {
             return getRecipeCollectionReference().orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
         }
 
+        fun findRecipeByClassification(recipeName : String, classification : String) : Query {
+            Log.d("TEST", recipeName)
+            when (classification) {
+                "Appetizer" -> return getRecipeCollectionReference().whereEqualTo(
+                    RECIPE_CLASSIFICATION_FIELD, "Appetizer").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
+                "Main Course" -> return getRecipeCollectionReference().whereEqualTo(
+                    RECIPE_CLASSIFICATION_FIELD, "Main Course").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
+                "Dessert" -> return getRecipeCollectionReference().whereEqualTo(
+                    RECIPE_CLASSIFICATION_FIELD, "Dessert").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
+                "Beverage" -> return getRecipeCollectionReference().whereEqualTo(
+                    RECIPE_CLASSIFICATION_FIELD, "Beverage").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
+            }
+            return getRecipeCollectionReference().orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
+        }
+
+
         fun likeRecipe(recipeID: String, likes : ArrayList<String>){
             getRecipeCollectionReference().document(recipeID).update(NUM_LIKES_FIELD, likes)
         }
