@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
                             i.putExtra(IntentKeys.USERNAME_KEY.name,
                                 res.documents[0].toObject(User::class.java)?.username)
                             startActivity(i)
-                            finish()
+                            finishAffinity()
                         }
                     } catch (err: FirebaseAuthInvalidUserException) {
                         withContext(Dispatchers.Main) {
@@ -150,7 +150,7 @@ class LoginActivity : AppCompatActivity() {
                                 res.documents[0].toObject(User::class.java)?.username)
                         }
                         startActivity(i)
-                        finish()
+                        finishAffinity()
                     }
                 } catch (err: FirebaseAuthInvalidUserException) {
                     Log.w(TAG, "signInWithCredential:failure", err)

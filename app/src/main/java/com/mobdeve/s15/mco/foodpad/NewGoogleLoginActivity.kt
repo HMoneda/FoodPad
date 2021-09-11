@@ -69,7 +69,7 @@ class NewGoogleLoginActivity : AppCompatActivity() {
 
                         }
                         startActivity(i)
-                        finish()
+                        finishAffinity()
                     }
                 } catch (err: FirebaseAuthInvalidUserException) {
                     Log.w(TAG, "signInWithCredential:failure", err)

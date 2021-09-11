@@ -27,13 +27,14 @@ class ProfileAdapter(options: FirestoreRecyclerOptions<User>): FirestoreRecycler
         private var editProfileBtn : Button = itemView.findViewById(R.id.editProfileBtn)
 
         fun bindData(model: User){
+            val followers = model.followers.size
             usernameTV.text = model.username
             if(model.bio != ""){
                 bioTV.text = model.bio
             }else{
                 bioTV.text = "This user does not have a bio yet."
             }
-            followerCount.text = "${model.followerCount} follower${if(model.followerCount <= 1) "" else "s"}"
+            followerCount.text = "${followers} follower${if(followers <= 1) "" else "s"}"
             Picasso.get().load(Uri.parse(model.imgUri)).into(profilePhoto)
         }
 

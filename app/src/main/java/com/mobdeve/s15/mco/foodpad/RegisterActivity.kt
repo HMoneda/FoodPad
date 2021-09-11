@@ -88,7 +88,7 @@ class RegisterActivity : AppCompatActivity() {
                                 putExtra(IntentKeys.USERNAME_KEY.name, username)
                             }
                             startActivity(i)
-                            finish()
+                            finishAffinity()
                         }
                     }
                 }catch (err : FirebaseAuthUserCollisionException){
