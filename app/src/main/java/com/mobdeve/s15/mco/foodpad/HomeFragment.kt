@@ -24,15 +24,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
-    private lateinit var adapter: HomeAdapter
+    private lateinit var adapter: SearchAdapter
     private lateinit var db: FirebaseFirestore
-
-    private var imageUri : Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home , container , false)
@@ -41,7 +44,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.followedUserRecipesRV)
-        db = FirebaseFirestore.getInstance()
+//        db = FirebaseFirestore.getInstance()
 
 //        val query : Query = db.collection(FirestoreReferences.RECIPES_COLLECTION).orderBy(FirestoreReferences.RECIPE_NAME_FIELD)
 //
@@ -51,19 +54,38 @@ class HomeFragment : Fragment() {
 //        recyclerView.adapter = adapter
 //        recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-
-//        layoutManager = LinearLayoutManager(this.context)
-//        recyclerView.layoutManager = layoutManager
-//        recyclerView.adapter = adapter
+        adapter = SearchAdapter()
+        layoutManager = LinearLayoutManager(this.context)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
     }
 
     override fun onStart(){
         super.onStart()
+        updateData()
 //        adapter.startListening()
     }
 
     override fun onStop(){
         super.onStop()
 //        adapter.stopListening()
+    }
+
+    fun updateData(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val UID = activity?.intent?.getStringExtra(IntentKeys.UID_KEY.name)
+            val recipes = FirestoreReferences.getRecipes().await()
+            val user = FirestoreReferences.getUserByID(UID!!).await().toObject(User::class.java)
+            val posts = ArrayList<Recipe>()
+            for(recipe in recipes){
+                if(recipe.toObject(Recipe::class.java).userID in user!!.following){
+                    posts.add(recipe.toObject(Recipe::class.java))
+                }
+            }
+            withContext(Dispatchers.Main){
+                adapter.setData(posts)
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 }

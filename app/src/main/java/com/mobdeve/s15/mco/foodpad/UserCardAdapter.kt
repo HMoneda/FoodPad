@@ -16,7 +16,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.squareup.picasso.Picasso
 
-class UserCardAdapter(options: FirestoreRecyclerOptions<User>): FirestoreRecyclerAdapter<User, UserCardAdapter.ViewHolder>(options){
+class UserCardAdapter(private var data : ArrayList<User> = ArrayList()): RecyclerView.Adapter<UserCardAdapter.ViewHolder>(){
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var userCardNameTV: TextView = itemView.findViewById(R.id.userCardNameTV)
@@ -47,13 +47,19 @@ class UserCardAdapter(options: FirestoreRecyclerOptions<User>): FirestoreRecycle
         return ViewHolder(v)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: User) {
-        val followers = model.followers.size
-        holder.userCardNameTV.text = model.username
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val followers = data[position].followers.size
+        holder.userCardNameTV.text = data[position].username
         holder.userCardFollowersTV.text = "Follower${if(followers <= 1) "" else "s"}: ${followers}"
-        Picasso.get().load(Uri.parse(model.imgUri)).into(holder.userCardPhotoIV)
-        holder.viewUser(model)
+        Picasso.get().load(Uri.parse(data[position].imgUri)).into(holder.userCardPhotoIV)
+        holder.viewUser(data[position])
     }
 
+    override fun getItemCount(): Int {
+        return data.size
+    }
 
+    fun setData(newData : ArrayList<User>){
+        data = newData
+    }
 }

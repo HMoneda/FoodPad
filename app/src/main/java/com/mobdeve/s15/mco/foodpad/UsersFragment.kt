@@ -8,6 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,10 +48,10 @@ class UsersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         usersRV = view.findViewById(R.id.filterUsersRV)
-        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
-        val query = FirestoreReferences.findUser(searchItem!!)
-        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<User> = FirestoreRecyclerOptions.Builder<User>().setQuery(query, User::class.java).build()
-        adapter = UserCardAdapter(fireStoreRecipeRecyclerOptions)
+//        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
+//        val query = FirestoreReferences.findUser(searchItem!!)
+//        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<User> = FirestoreRecyclerOptions.Builder<User>().setQuery(query, User::class.java).build()
+        adapter = UserCardAdapter()
         usersRV.adapter = adapter
         usersRV.layoutManager = LinearLayoutManager(this.context)
     }
@@ -76,12 +81,28 @@ class UsersFragment : Fragment() {
 
     override fun onStart(){
         super.onStart()
-        adapter.startListening()
+        updateData()
+//        adapter.startListening()
     }
 
     override fun onStop(){
         super.onStop()
-        adapter.stopListening()
-        adapter.notifyDataSetChanged()
+//        adapter.stopListening()
+//        adapter.notifyDataSetChanged()
+    }
+
+    fun updateData(){
+        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
+        CoroutineScope(Dispatchers.IO).launch {
+            val users = FirestoreReferences.findUser(searchItem!!).get().await()
+            val posts = ArrayList<User>()
+            for(user in users){
+                posts.add(user.toObject(User::class.java))
+            }
+            withContext(Dispatchers.Main){
+                adapter.setData(posts)
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 }

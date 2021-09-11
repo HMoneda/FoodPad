@@ -123,6 +123,9 @@ class FirestoreReferences {
             return getRecipeCollectionReference().add(newRecipe)
         }
 
+        fun getRecipes(): Task<QuerySnapshot> {
+            return getRecipeCollectionReference().get()
+        }
         fun getRecipe(recipeID : String) : Task<DocumentSnapshot> {
             return getRecipeCollectionReference().document(recipeID).get()
         }
