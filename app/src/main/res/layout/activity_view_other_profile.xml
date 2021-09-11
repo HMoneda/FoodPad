@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/logoutBtn"
+            android:id="@+id/viewProfileBackBtn"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
@@ -52,14 +52,14 @@
         app:layout_constraintTop_toBottomOf="@id/headerLL">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileImage"
+            android:id="@+id/viewProfileImageIV"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_gravity="center"
             android:src="@drawable/default_avatar" />
 
         <TextView
-            android:id="@+id/usernameTV"
+            android:id="@+id/viewProfileUsernameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
@@ -69,7 +69,7 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/bioTV"
+            android:id="@+id/viewProfileBioTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
@@ -79,7 +79,7 @@
             android:textSize="12dp" />
 
         <TextView
-            android:id="@+id/numFollowersTV"
+            android:id="@+id/viewProfileNumFollowersTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
@@ -89,7 +89,7 @@
             android:textSize="12dp" />
 
         <Button
-            android:id="@+id/editProfileBtn"
+            android:id="@+id/followUserBtn"
             android:layout_width="144dp"
             android:layout_height="wrap_content"
             android:text="Follow" />
@@ -109,7 +109,7 @@
                 android:textColor="@color/black"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/userRecipesRV"
+                android:id="@+id/viewUserRecipesRV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

@@ -19,8 +19,6 @@ import java.lang.reflect.Array.newInstance
 class SearchableActivity : AppCompatActivity() {
     private lateinit var searchItemTV : TextView
     private lateinit var backBtn : ImageButton
-    private lateinit var resultsRV : RecyclerView
-    private lateinit var recipeAdapter: HomeAdapter
     private lateinit var filterTL : TabLayout
     private lateinit var searchVP : ViewPager2
 
@@ -50,24 +48,16 @@ class SearchableActivity : AppCompatActivity() {
             finish()
         }
 
-        val query = FirestoreReferences.findRecipe(searchItem!!)
-        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
-
-        recipeAdapter = HomeAdapter(fireStoreRecipeRecyclerOptions)
-
     }
 
 
     override fun onStart() {
         super.onStart()
         Log.d("SEARCHABLE_ACTIVITY", "onStart Called")
-        recipeAdapter.startListening()
     }
 
     override fun onPause() {
         super.onPause()
-        recipeAdapter.stopListening()
-        recipeAdapter.notifyDataSetChanged()
     }
 
     class VPAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity){

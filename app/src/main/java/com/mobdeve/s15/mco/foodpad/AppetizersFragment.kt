@@ -8,6 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +29,7 @@ class AppetizersFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var appetizersRV : RecyclerView
+    private lateinit var searchAdapter: SearchAdapter
     private lateinit var adapter : HomeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,11 +50,12 @@ class AppetizersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         appetizersRV = view.findViewById(R.id.filterAppetizersRV)
-        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
-        val query = FirestoreReferences.findRecipeByClassification(searchItem!!, "Appetizer")
-        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
-        adapter = HomeAdapter(fireStoreRecipeRecyclerOptions)
-        appetizersRV.adapter = adapter
+//        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
+//        val query = FirestoreReferences.findAppetizerRecipe(searchItem!!)
+//        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
+//        adapter = HomeAdapter(fireStoreRecipeRecyclerOptions)
+        searchAdapter = SearchAdapter()
+        appetizersRV.adapter = searchAdapter
         appetizersRV.layoutManager = LinearLayoutManager(this.context)
 
     }
@@ -78,12 +85,29 @@ class AppetizersFragment : Fragment() {
 
     override fun onStart(){
         super.onStart()
-        adapter.startListening()
+        updateData()
     }
 
     override fun onStop(){
         super.onStop()
-        adapter.stopListening()
-        adapter.notifyDataSetChanged()
+//        adapter.stopListening()
+//        adapter.notifyDataSetChanged()
+    }
+
+    fun updateData(){
+        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
+        CoroutineScope(Dispatchers.IO).launch {
+            val recipes = FirestoreReferences.findRecipe(searchItem!!).get().await()
+            val posts = ArrayList<Recipe>()
+            for(recipe in recipes){
+                if(recipe.toObject(Recipe::class.java).classification == "Appetizer"){
+                    posts.add(recipe.toObject(Recipe::class.java))
+                }
+            }
+            withContext(Dispatchers.Main){
+                searchAdapter.setData(posts)
+                searchAdapter.notifyDataSetChanged()
+            }
+        }
     }
 }

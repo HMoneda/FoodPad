@@ -78,6 +78,18 @@ class FirestoreReferences {
             return getUserCollectionReference().whereEqualTo(USERNAME_FIELD, username).get()
         }
 
+        fun getUserByID(userID : String) : Task<DocumentSnapshot>{
+            return getUserCollectionReference().document(userID).get()
+        }
+
+        fun followUser(userID : String, followers : ArrayList<String>){
+            getUserCollectionReference().document(userID).update(FOLLOWERS_FIELD, followers)
+        }
+
+        fun addFollowedUser(userID: String, followed : ArrayList<String>){
+            getUserCollectionReference().document(userID).update(FOLLOWING_FIELD, followed)
+        }
+
         fun getUserByEmailQuery(email : String?) : Query{
             return getUserCollectionReference().whereEqualTo(EMAIL_FIELD, email)
         }
@@ -102,6 +114,11 @@ class FirestoreReferences {
             return getRecipeCollectionReference().whereEqualTo(USER_FIELD, uid)
         }
 
+        fun findUser(username : String) : Query{
+            Log.d("TEST", username)
+            return getUserCollectionReference().orderBy(USERNAME_FIELD).startAt(username).endAt(username + "\uf8ff")
+        }
+
         fun addRecipe(newRecipe: Recipe) : Task<DocumentReference>{
             return getRecipeCollectionReference().add(newRecipe)
         }
@@ -118,26 +135,10 @@ class FirestoreReferences {
             getRecipeCollectionReference().document(recipeID).delete()
         }
 
-        fun findRecipe(recipeName : String) : Query{
+        fun findRecipe(recipeName : String) : Query {
             Log.d("TEST", recipeName)
             return getRecipeCollectionReference().orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
         }
-
-        fun findRecipeByClassification(recipeName : String, classification : String) : Query {
-            Log.d("TEST", recipeName)
-            when (classification) {
-                "Appetizer" -> return getRecipeCollectionReference().whereEqualTo(
-                    RECIPE_CLASSIFICATION_FIELD, "Appetizer").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
-                "Main Course" -> return getRecipeCollectionReference().whereEqualTo(
-                    RECIPE_CLASSIFICATION_FIELD, "Main Course").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
-                "Dessert" -> return getRecipeCollectionReference().whereEqualTo(
-                    RECIPE_CLASSIFICATION_FIELD, "Dessert").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
-                "Beverage" -> return getRecipeCollectionReference().whereEqualTo(
-                    RECIPE_CLASSIFICATION_FIELD, "Beverage").orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
-            }
-            return getRecipeCollectionReference().orderBy(RECIPE_NAME_FIELD).startAt(recipeName).endAt(recipeName + "\uf8ff")
-        }
-
 
         fun likeRecipe(recipeID: String, likes : ArrayList<String>){
             getRecipeCollectionReference().document(recipeID).update(NUM_LIKES_FIELD, likes)

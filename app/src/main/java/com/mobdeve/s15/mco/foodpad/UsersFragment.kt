@@ -23,7 +23,7 @@ class UsersFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var adapter : HomeAdapter
+    private lateinit var adapter : UserCardAdapter
     private lateinit var usersRV : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +44,9 @@ class UsersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         usersRV = view.findViewById(R.id.filterUsersRV)
         val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
-        val query = FirestoreReferences.findRecipeByClassification(searchItem!!, "Appetizer")
-        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
-        adapter = HomeAdapter(fireStoreRecipeRecyclerOptions)
+        val query = FirestoreReferences.findUser(searchItem!!)
+        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<User> = FirestoreRecyclerOptions.Builder<User>().setQuery(query, User::class.java).build()
+        adapter = UserCardAdapter(fireStoreRecipeRecyclerOptions)
         usersRV.adapter = adapter
         usersRV.layoutManager = LinearLayoutManager(this.context)
     }

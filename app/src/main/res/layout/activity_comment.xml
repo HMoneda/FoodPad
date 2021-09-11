@@ -20,7 +20,7 @@
         app:layout_constraintBottom_toTopOf="@id/commentsRV">
 
         <ImageButton
-            android:id="@+id/logoutBtn"
+            android:id="@+id/commentBackBtn"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"

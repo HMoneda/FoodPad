@@ -71,6 +71,11 @@ class ViewRecipeActivity : AppCompatActivity() {
             likeRecipe(recipeID!!, loggedIn!!)
         }
 
+        commentBtn.setOnClickListener {
+            val i = Intent(this@ViewRecipeActivity, CommentActivity::class.java)
+
+        }
+
         backBtn.setOnClickListener {
             finish()
         }
