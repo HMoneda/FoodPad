@@ -18,13 +18,12 @@
         android:padding="8dp">
 
         <ImageView
-            android:id="@+id/userPhotoIV"
+            android:id="@+id/userCommentPhotoIV"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:background="@drawable/ic_egg"
             android:padding="4dp" />
 
         <LinearLayout
@@ -36,6 +35,7 @@
             android:layout_gravity="center_vertical">
 
             <TextView
+                android:id="@+id/userCommentUsernameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -45,6 +45,7 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/userCommentContentTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"

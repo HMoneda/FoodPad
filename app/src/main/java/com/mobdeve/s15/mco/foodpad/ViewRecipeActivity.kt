@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.core.view.isVisible
+import com.google.firebase.firestore.ktx.toObjects
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +74,9 @@ class ViewRecipeActivity : AppCompatActivity() {
 
         commentBtn.setOnClickListener {
             val i = Intent(this@ViewRecipeActivity, CommentActivity::class.java)
-
+            i.putExtra(IntentKeys.RECIPE_ID_KEY.name, recipeID)
+            i.putExtra(IntentKeys.UID_KEY.name, loggedIn)
+            startActivity(i)
         }
 
         backBtn.setOnClickListener {
@@ -90,19 +93,20 @@ class ViewRecipeActivity : AppCompatActivity() {
     private fun getData(recipeID : String){
         CoroutineScope(Dispatchers.IO).launch {
             val recipe = FirestoreReferences.getRecipe(recipeID).await().toObject(Recipe::class.java)
+            val numComments = FirestoreReferences.getCommentQuery(recipeID).get().await().size()
             withContext(Dispatchers.Main){
-                bindData(recipe!!)
+                bindData(recipe!!, numComments!!)
             }
         }
     }
 
-    private fun bindData(recipe : Recipe){
+    private fun bindData(recipe : Recipe, numComments : Int){
 
         val loggedIn = intent.getStringExtra(IntentKeys.UID_KEY.name)
 
         recipeName.text = recipe.recipeName
         numLikesTV.text = recipe.likes.size.toString()
-        numCommentsTV.text = recipe.comments.size.toString()
+        numCommentsTV.text = numComments.toString()
         numServingsTV.text = "Servings: ${recipe.servings}"
         prepTimeTV.text = "Preparation time: ${recipe.prepTime} min/s"
         Picasso.get().load(Uri.parse(recipe.recipeImg)).into(recipeImg)

@@ -11,6 +11,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class SearchAdapter(private var data : ArrayList<Recipe> = ArrayList()) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
@@ -65,13 +70,18 @@ class SearchAdapter(private var data : ArrayList<Recipe> = ArrayList()) : Recycl
     }
 
     override fun onBindViewHolder(holder: SearchAdapter.ViewHolder, position: Int) {
-        holder.recipeName.text = data[position].recipeName
-        holder.recipeAuthor.text = data[position].author
-        holder.numLikes.text = data[position].likes.size.toString()
-        holder.numComments.text = data[position].comments.size.toString()
-        Picasso.get().load(Uri.parse(data[position].recipeImg)).into(holder.recipeImg)
-        holder.setClassification(data[position].classification)
-        holder.viewRecipe(data[position])
+        CoroutineScope(Dispatchers.IO).launch {
+            val numComments = FirestoreReferences.getCommentQuery(data[position].recipeID!!).get().await().size()
+            withContext(Dispatchers.Main){
+                holder.recipeName.text = data[position].recipeName
+                holder.recipeAuthor.text = data[position].author
+                holder.numLikes.text = data[position].likes.size.toString()
+                holder.numComments.text = numComments.toString()
+                Picasso.get().load(Uri.parse(data[position].recipeImg)).into(holder.recipeImg)
+                holder.setClassification(data[position].classification)
+                holder.viewRecipe(data[position])
+            }
+        }
     }
 
     override fun getItemCount(): Int {

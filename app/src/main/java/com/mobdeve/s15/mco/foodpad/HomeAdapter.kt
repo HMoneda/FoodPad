@@ -15,6 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerAdapter<Recipe, HomeAdapter.ViewHolder>(options){
 
@@ -69,13 +74,18 @@ class HomeAdapter(options: FirestoreRecyclerOptions<Recipe>): FirestoreRecyclerA
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Recipe) {
-        holder.recipeName.text = model.recipeName
-        holder.recipeAuthor.text = model.author
-        holder.numLikes.text = model.likes.size.toString()
-        holder.numComments.text = model.comments.size.toString()
-        Picasso.get().load(Uri.parse(model.recipeImg)).into(holder.recipeImg)
-        holder.setClassification(model.classification)
-        holder.viewRecipe(model)
+        CoroutineScope(Dispatchers.IO).launch {
+            val numComments = FirestoreReferences.getCommentQuery(model.recipeID!!).get().await().size()
+            withContext(Dispatchers.Main){
+                holder.recipeName.text = model.recipeName
+                holder.recipeAuthor.text = model.author
+                holder.numLikes.text = model.likes.size.toString()
+                holder.numComments.text = numComments.toString()
+                Picasso.get().load(Uri.parse(model.recipeImg)).into(holder.recipeImg)
+                holder.setClassification(model.classification)
+                holder.viewRecipe(model)
+            }
+        }
     }
 
 

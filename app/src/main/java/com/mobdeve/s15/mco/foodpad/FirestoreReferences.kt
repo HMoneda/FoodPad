@@ -25,9 +25,11 @@ class FirestoreReferences {
         private var storage : StorageReference? = null
         private var usersRef : CollectionReference? = null
         private var recipeRef : CollectionReference? = null
+        private var commentRef : CollectionReference? = null
 
         const val USERS_COLLECTION = "users"
         const val RECIPES_COLLECTION = "recipes"
+        const val COMMENT_COLLECTION = "comments"
         const val EMAIL_FIELD = "email"
         const val USERNAME_FIELD = "username"
         const val FOLLOWER_COUNT_FIELD = "followerCount"
@@ -41,6 +43,9 @@ class FirestoreReferences {
         const val NUM_LIKES_FIELD = "likes"
         const val USER_FIELD = "userID"
         const val RECIPE_CLASSIFICATION_FIELD = "classification"
+        const val COMMENT_RECIPE_ID_FIELD = "recipeID"
+        const val COMMENT_TIMESTAMP_FIELD = "timestamp"
+
 
         fun getFirestoreInstance() : FirebaseFirestore{
             if(db == null){
@@ -68,6 +73,13 @@ class FirestoreReferences {
                 recipeRef = getFirestoreInstance().collection(RECIPES_COLLECTION)
             }
             return  recipeRef as CollectionReference
+        }
+
+        fun getCommentCollectionReference() : CollectionReference{
+            if(commentRef == null){
+                commentRef = getFirestoreInstance().collection(COMMENT_COLLECTION)
+            }
+            return commentRef as CollectionReference
         }
 
         fun getUserByEmail(email : String) : Task<QuerySnapshot> {
@@ -151,6 +163,14 @@ class FirestoreReferences {
             return getRecipeCollectionReference().orderBy(NUM_LIKES_FIELD, Query.Direction.DESCENDING).limit(5)
         }
 
+        fun addComment(newComment : Comment) : Task<DocumentReference>{
+            return getCommentCollectionReference().add(newComment)
+        }
+
+        fun getCommentQuery(recipeID : String) : Query{
+            return getCommentCollectionReference().whereEqualTo(COMMENT_RECIPE_ID_FIELD, recipeID).orderBy(COMMENT_TIMESTAMP_FIELD)
+        }
+
         fun generateUserProfilePath(uid: String) : String{
             return "images/users/${uid}-ProfileAvatar"
         }
@@ -164,10 +184,6 @@ class FirestoreReferences {
             getStorageReferenceInstance().child(path).putFile(imageUri).await()
 
             return getStorageReferenceInstance().child(path).downloadUrl.await()
-        }
-
-        fun generateUserPhotoPath(uid: String, imageUri : Uri) : String{
-            return "images/users/${uid}-${imageUri.lastPathSegment}"
         }
 
         fun getDefaultAvatar(): Task<Uri> {

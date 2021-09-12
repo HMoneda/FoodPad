@@ -1,5 +1,8 @@
 package com.mobdeve.s15.mco.foodpad
 
-data class Comment(val userImg : String, val username : String, val contents : String){
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.*
+
+data class Comment(val userID: String, val recipeID: String, val contents: String, @ServerTimestamp val timestamp: Date? = null){
     constructor() : this ("", "", "")
 }
