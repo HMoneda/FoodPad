@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -31,6 +32,7 @@ class AppetizersFragment : Fragment() {
     private lateinit var appetizersRV : RecyclerView
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var adapter : HomeAdapter
+    private lateinit var noAppetizers : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +52,7 @@ class AppetizersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         appetizersRV = view.findViewById(R.id.filterAppetizersRV)
+        noAppetizers = view.findViewById(R.id.noAppetizersTV)
 //        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
 //        val query = FirestoreReferences.findAppetizerRecipe(searchItem!!)
 //        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
@@ -105,6 +108,11 @@ class AppetizersFragment : Fragment() {
                 }
             }
             withContext(Dispatchers.Main){
+                if(posts.size != 0){
+                    noAppetizers.visibility = View.GONE
+                } else {
+                    noAppetizers.setText("No appetizers found!")
+                }
                 searchAdapter.setData(posts)
                 searchAdapter.notifyDataSetChanged()
             }

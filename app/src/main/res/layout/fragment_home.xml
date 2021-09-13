@@ -23,6 +23,16 @@
             android:textColor="@color/black"
             android:textSize="24sp" />
 
+        <TextView
+            android:id="@+id/noFollowingRecipesTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:layout_gravity="center"
+            android:text=""
+            android:textColor="@color/error_red"
+            android:textSize="18sp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/followedUserRecipesRV"
             android:layout_width="match_parent"

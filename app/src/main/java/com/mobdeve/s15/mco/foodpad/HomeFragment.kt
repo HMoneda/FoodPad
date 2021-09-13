@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
@@ -35,7 +36,7 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var adapter: SearchAdapter
-    private lateinit var db: FirebaseFirestore
+    private lateinit var noResults : TextView
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home , container , false)
@@ -44,20 +45,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.followedUserRecipesRV)
-//        db = FirebaseFirestore.getInstance()
-
-//        val query : Query = db.collection(FirestoreReferences.RECIPES_COLLECTION).orderBy(FirestoreReferences.RECIPE_NAME_FIELD)
-//
-//        val firestoreRecyclerOptions: FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
-//
-//        adapter = HomeAdapter(firestoreRecyclerOptions)
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        noResults = view.findViewById(R.id.noFollowingRecipesTV)
 
         adapter = SearchAdapter()
         layoutManager = LinearLayoutManager(this.context)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
+
     }
 
     override fun onStart(){
@@ -83,6 +77,11 @@ class HomeFragment : Fragment() {
                 }
             }
             withContext(Dispatchers.Main){
+                if(posts.size != 0){
+                    noResults.visibility = View.GONE
+                } else {
+                    noResults.setText("You are not following any users. Check out popular recipes to start finding recipes for you!")
+                }
                 adapter.setData(posts)
                 adapter.notifyDataSetChanged()
             }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +33,7 @@ class DessertsFragment : Fragment() {
     private lateinit var adapter : HomeAdapter
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var dessertsRV : RecyclerView
+    private lateinit var noDesserts : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,7 @@ class DessertsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dessertsRV = view.findViewById(R.id.filterDessertsRV)
+        noDesserts = view.findViewById(R.id.noDessertsTV)
         val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
 //        val query = FirestoreReferences.findDessertRecipe(searchItem!!)
 //        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
@@ -104,6 +108,11 @@ class DessertsFragment : Fragment() {
                 }
             }
             withContext(Dispatchers.Main){
+                if(posts.size != 0){
+                    noDesserts.visibility = View.GONE
+                } else {
+                    noDesserts.setText("No desserts found!")
+                }
                 searchAdapter.setData(posts)
                 searchAdapter.notifyDataSetChanged()
             }

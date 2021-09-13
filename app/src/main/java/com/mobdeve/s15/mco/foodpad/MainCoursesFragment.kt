@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -31,6 +32,7 @@ class MainCoursesFragment : Fragment() {
     private lateinit var adapter : HomeAdapter
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var mainCourseRV : RecyclerView
+    private lateinit var noMainCourses : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +51,7 @@ class MainCoursesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainCourseRV = view.findViewById(R.id.filterMainCoursesRV)
+        noMainCourses = view.findViewById(R.id.noMainCoursesTV)
         val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
 //        val query = FirestoreReferences.findMainCourseRecipe(searchItem!!)
 //        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<Recipe> = FirestoreRecyclerOptions.Builder<Recipe>().setQuery(query, Recipe::class.java).build()
@@ -104,6 +107,11 @@ class MainCoursesFragment : Fragment() {
                 }
             }
             withContext(Dispatchers.Main){
+                if(posts.size != 0){
+                    noMainCourses.visibility = View.GONE
+                } else {
+                    noMainCourses.setText("No main courses found!")
+                }
                 searchAdapter.setData(posts)
                 searchAdapter.notifyDataSetChanged()
             }

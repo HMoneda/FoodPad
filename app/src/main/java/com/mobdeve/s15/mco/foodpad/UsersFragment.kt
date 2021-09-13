@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -30,6 +31,7 @@ class UsersFragment : Fragment() {
     private var param2: String? = null
     private lateinit var adapter : UserCardAdapter
     private lateinit var usersRV : RecyclerView
+    private lateinit var noUsers : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,7 @@ class UsersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         usersRV = view.findViewById(R.id.filterUsersRV)
+        noUsers = view.findViewById(R.id.noUsersTV)
 //        val searchItem = activity?.intent?.getStringExtra(IntentKeys.SEARCH_ITEM_KEY.name)
 //        val query = FirestoreReferences.findUser(searchItem!!)
 //        val fireStoreRecipeRecyclerOptions : FirestoreRecyclerOptions<User> = FirestoreRecyclerOptions.Builder<User>().setQuery(query, User::class.java).build()
@@ -100,6 +103,11 @@ class UsersFragment : Fragment() {
                 posts.add(user.toObject(User::class.java))
             }
             withContext(Dispatchers.Main){
+                if(posts.size != 0){
+                    noUsers.visibility = View.GONE
+                } else {
+                    noUsers.setText("No users found!")
+                }
                 adapter.setData(posts)
                 adapter.notifyDataSetChanged()
             }
