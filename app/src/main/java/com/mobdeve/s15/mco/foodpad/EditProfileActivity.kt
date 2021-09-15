@@ -1,15 +1,22 @@
 package com.mobdeve.s15.mco.foodpad
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class EditProfileActivity : AppCompatActivity() {
@@ -55,6 +63,34 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+    private val cameraResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            try {
+                if (result.data != null) {
+                    imageUri = getImageUri(this,result.data!!.extras!!.get("data") as Bitmap)
+                    Picasso.get().load(imageUri).into(profileImg)
+                    Log.d(TAG, "Image Capture Complete")
+                }
+            } catch (err: Exception) {
+                Log.d(TAG, err.localizedMessage!!)
+            }
+        }
+    }
+
+    private fun getImageUri(context : Context, bitmap : Bitmap) : Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path: String = MediaStore.Images.Media.insertImage(
+            context.getContentResolver(),
+            bitmap,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
@@ -81,12 +117,34 @@ class EditProfileActivity : AppCompatActivity() {
         loadProfile(username!!, bio!!,profileUri!!, isGoogleSignIn)
 
         selectImgFAB.setOnClickListener{
-            val i = Intent()
-            i.apply {
-                type = "image/*"
-                action = Intent.ACTION_OPEN_DOCUMENT
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Select Image")
+            builder.setMessage("Choose your option")
+            builder.setPositiveButton("Gallery"){ dialog, which ->
+                dialog.dismiss()
+                val i = Intent()
+                i.apply {
+                    type = "image/*"
+                    action = Intent.ACTION_OPEN_DOCUMENT
+                }
+                activityResultLauncher.launch(Intent.createChooser(i, "Select Picture"))
             }
-            activityResultLauncher.launch(Intent.createChooser(i, "Select Picture"))
+            builder.setNegativeButton("Camera"){dialog, which ->
+                dialog.dismiss()
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePhotoIntent ->
+                    takePhotoIntent.resolveActivity(packageManager)?.also {
+                        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                        val storagePerm = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        if(permission != PackageManager.PERMISSION_GRANTED || storagePerm != PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                        }else{
+                            cameraResultLauncher.launch(takePhotoIntent)
+                        }
+                    }
+                }
+            }
+            val dialog : AlertDialog = builder.create()
+            dialog.show()
         }
 
         saveBtn.setOnClickListener {

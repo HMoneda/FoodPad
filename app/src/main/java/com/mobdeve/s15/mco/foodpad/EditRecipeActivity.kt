@@ -1,15 +1,22 @@
 package com.mobdeve.s15.mco.foodpad
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
@@ -18,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 class EditRecipeActivity : AppCompatActivity() {
@@ -55,6 +63,34 @@ class EditRecipeActivity : AppCompatActivity() {
                 Log.d(TAG, err.localizedMessage!!)
             }
         }
+    }
+
+    private val cameraResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            try {
+                if (result.data != null) {
+                    imageUri = getImageUri(this,result.data!!.extras!!.get("data") as Bitmap)
+                    Picasso.get().load(imageUri).into(recipeImg)
+                    Log.d(TAG, "Image Capture Complete")
+                }
+            } catch (err: Exception) {
+                Log.d(TAG, err.localizedMessage!!)
+            }
+        }
+    }
+
+    private fun getImageUri(context : Context, bitmap : Bitmap) : Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path: String = MediaStore.Images.Media.insertImage(
+            context.getContentResolver(),
+            bitmap,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,12 +131,34 @@ class EditRecipeActivity : AppCompatActivity() {
         val recipeImgUri = intent.getStringExtra(IntentKeys.RECIPE_IMG_URI_KEY.name)
 
         editRecipeImgFAB.setOnClickListener {
-            val i = Intent()
-            i.apply {
-                type = "image/*"
-                action = Intent.ACTION_OPEN_DOCUMENT
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Select Image")
+            builder.setMessage("Choose your option")
+            builder.setPositiveButton("Gallery"){ dialog, which ->
+                dialog.dismiss()
+                val i = Intent()
+                i.apply {
+                    type = "image/*"
+                    action = Intent.ACTION_OPEN_DOCUMENT
+                }
+                activityResultLauncher.launch(Intent.createChooser(i, "Select Picture"))
             }
-            activityResultLauncher.launch(Intent.createChooser(i, "Select Picture"))
+            builder.setNegativeButton("Camera"){dialog, which ->
+                dialog.dismiss()
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePhotoIntent ->
+                    takePhotoIntent.resolveActivity(packageManager)?.also {
+                        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                        val storagePerm = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        if(permission != PackageManager.PERMISSION_GRANTED || storagePerm != PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                        }else{
+                            cameraResultLauncher.launch(takePhotoIntent)
+                        }
+                    }
+                }
+            }
+            val dialog : AlertDialog = builder.create()
+            dialog.show()
         }
 
         addIngredientButton.setOnClickListener{
@@ -169,20 +227,36 @@ class EditRecipeActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main){
                     Toast.makeText(this@EditRecipeActivity, "Recipe Updated", Toast.LENGTH_LONG).show()
+                    setResult(4)
                     finish()
                 }
             }
         }
 
         deleteRecipeBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch{
-                FirestoreReferences.deleteRecipe(recipeID!!)
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Delete Recipe")
+            builder.setMessage("Do you wish to delete your recipe?")
+            builder.setPositiveButton("Delete"){ dialog, which ->
+                dialog.dismiss()
+                CoroutineScope(Dispatchers.IO).launch{
+                    FirestoreReferences.deleteRecipe(recipeID!!)
 
-                withContext(Dispatchers.Main){
-                    Toast.makeText(this@EditRecipeActivity, "Recipe Deleted", Toast.LENGTH_LONG).show()
-                    finish()
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(this@EditRecipeActivity, "Recipe Deleted", Toast.LENGTH_LONG).show()
+                        setResult(3)
+                        finish()
+
+                    }
                 }
             }
+
+            builder.setNegativeButton("Cancel"){ dialog, which ->
+                dialog.dismiss()
+            }
+
+            val dialog : AlertDialog = builder.create()
+            dialog.show()
         }
 
         backBtn.setOnClickListener {
@@ -200,7 +274,7 @@ class EditRecipeActivity : AppCompatActivity() {
 
     private fun getData(recipeID : String){
         CoroutineScope(Dispatchers.IO).launch {
-            val recipe = FirestoreReferences.getRecipe(recipeID!!).await().toObject(Recipe::class.java)
+            val recipe = FirestoreReferences.getRecipe(recipeID).await().toObject(Recipe::class.java)
             withContext(Dispatchers.Main){
                 if(!dataBinded){
                     bindData(recipe!!)

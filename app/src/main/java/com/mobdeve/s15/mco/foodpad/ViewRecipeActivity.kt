@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import com.google.firebase.firestore.ktx.toObjects
 import com.squareup.picasso.Picasso
@@ -15,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class ViewRecipeActivity : AppCompatActivity() {
 
@@ -31,6 +34,22 @@ class ViewRecipeActivity : AppCompatActivity() {
     private lateinit var commentBtn : ImageButton
     private lateinit var viewIngredientLayout : LinearLayout
     private lateinit var viewProcedureLayout: LinearLayout
+
+
+    private val activityResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)
+        if (result.resultCode == 3) {
+            Log.d("VIEW", "RECIPE DELETED")
+            finish()
+        }else if (result.resultCode == 4){
+            Log.d("VIEW", "RECIPE UPDATED")
+            getData(recipeID!!)
+        }else if (result.resultCode == Activity.RESULT_CANCELED){
+            getData(recipeID!!)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +84,7 @@ class ViewRecipeActivity : AppCompatActivity() {
             i.putExtra(IntentKeys.RECIPE_AUTHOR_UID_KEY.name, uid)
             i.putExtra(IntentKeys.USERNAME_KEY.name, username)
             i.putExtra(IntentKeys.RECIPE_IMG_URI_KEY.name, recipeImgUri)
-            startActivity(i)
+            activityResultLauncher.launch(i)
         }
 
         likeBtn.setOnClickListener {
@@ -82,11 +101,7 @@ class ViewRecipeActivity : AppCompatActivity() {
         backBtn.setOnClickListener {
             finish()
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-        val recipeID = intent.getStringExtra(IntentKeys.RECIPE_ID_KEY.name)
         getData(recipeID!!)
     }
 
