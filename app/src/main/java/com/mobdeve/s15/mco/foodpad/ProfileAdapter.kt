@@ -32,7 +32,7 @@ class ProfileAdapter(options: FirestoreRecyclerOptions<User>): FirestoreRecycler
             if(model.bio != ""){
                 bioTV.text = model.bio
             }else{
-                bioTV.text = "This user does not have a bio yet."
+                bioTV.text = "Tell the world a little about yourself!"
             }
             followerCount.text = "${followers} follower${if(followers <= 1) "" else "s"}"
             Picasso.get().load(Uri.parse(model.imgUri)).into(profilePhoto)
