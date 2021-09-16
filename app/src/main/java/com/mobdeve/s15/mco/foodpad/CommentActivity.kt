@@ -41,6 +41,7 @@ class CommentActivity : AppCompatActivity() {
         }
 
         backBtn.setOnClickListener {
+            setResult(4)
             finish()
         }
 

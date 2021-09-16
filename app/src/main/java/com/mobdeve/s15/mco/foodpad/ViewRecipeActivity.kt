@@ -95,7 +95,7 @@ class ViewRecipeActivity : AppCompatActivity() {
             val i = Intent(this@ViewRecipeActivity, CommentActivity::class.java)
             i.putExtra(IntentKeys.RECIPE_ID_KEY.name, recipeID)
             i.putExtra(IntentKeys.UID_KEY.name, loggedIn)
-            startActivity(i)
+            activityResultLauncher.launch(i)
         }
 
         backBtn.setOnClickListener {

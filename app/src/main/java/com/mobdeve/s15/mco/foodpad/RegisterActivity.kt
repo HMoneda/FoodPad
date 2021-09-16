@@ -68,7 +68,7 @@ class RegisterActivity : AppCompatActivity() {
                 try{
                     val userDoc = FirestoreReferences.getUserByUsername(username).await()
                     val profileUri = FirestoreReferences.getDefaultAvatar().await().toString()
-                    val newUser = User(username, email, profileUri, "", 0, ArrayList(), ArrayList(), false)
+                    val newUser = User(username, email, profileUri, "", ArrayList(), ArrayList(), false)
 
                     if(!userDoc.isEmpty){
                         withContext(Dispatchers.Main){

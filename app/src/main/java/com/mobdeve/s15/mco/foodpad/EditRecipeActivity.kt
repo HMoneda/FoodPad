@@ -221,7 +221,7 @@ class EditRecipeActivity : AppCompatActivity() {
 
 
                     val updatedRecipe = Recipe(recipeName, uid!!, username!!,
-                        ArrayList(),ArrayList(),numServings,
+                        ArrayList(),numServings,
                         Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(),classification)
 
                     FirestoreReferences.updateRecipe(recipeID!!, updatedRecipe)

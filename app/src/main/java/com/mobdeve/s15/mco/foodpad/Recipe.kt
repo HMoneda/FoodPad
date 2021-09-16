@@ -4,9 +4,9 @@ import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.DocumentReference
 
 data class Recipe(val recipeName: String, val userID: String, val author: String, val likes: ArrayList<String>,
-                  val comments: ArrayList<Comment>, val servings: String, val prepTime: Int, val ingredients: ArrayList<Ingredient>,
+                  val servings: String, val prepTime: Int, val ingredients: ArrayList<Ingredient>,
                   val procedures : ArrayList<String>, val recipeImg : String, val classification : String,
                   @DocumentId val recipeID : String? = null){
-    constructor() : this("", "","", ArrayList(), ArrayList(), "", 0, ArrayList(), ArrayList(), "", "", "")
+    constructor() : this("", "","", ArrayList(), "", 0, ArrayList(), ArrayList(), "", "", "")
 }
 

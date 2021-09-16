@@ -43,7 +43,7 @@ class NewGoogleLoginActivity : AppCompatActivity() {
             val username = usernameEt.text.toString()
             val credential = GoogleAuthProvider.getCredential(accountID, null)
 
-            val newUser = User(username,email!!,profileUri!!,"",0, ArrayList(),ArrayList(), true)
+            val newUser = User(username,email!!,profileUri!!,"", ArrayList(),ArrayList(), true)
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
