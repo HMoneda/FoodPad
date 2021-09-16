@@ -179,58 +179,106 @@ class CreateRecipeActivity : AppCompatActivity() {
         }
 
         saveBtn.setOnClickListener {
-            Log.d(TAG, "Recipe Saved!")
-            val recipeName = recipeNameET.text.toString()
-            val numServings = numServingsET.text.toString()
-            val prepTime = totalTimeET.text.toString()
-            var recipeImg : Uri? = null
-            val classification = classificationSpinner.selectedItem.toString()
+            if(!checkFields()){
+                Log.d(TAG, "Recipe Saved!")
+                val recipeName = recipeNameET.text.toString()
+                val numServings = numServingsET.text.toString()
+                val prepTime = totalTimeET.text.toString()
+                var recipeImg : Uri? = null
+                val classification = classificationSpinner.selectedItem.toString()
 
-            val ingredients : ArrayList<Ingredient> = ArrayList()
-            val procedures : ArrayList<String> = ArrayList()
+                val ingredients : ArrayList<Ingredient> = ArrayList()
+                val procedures : ArrayList<String> = ArrayList()
 
-            ingredientLayout.forEach { view ->
-                val qty = view.findViewById<EditText>(R.id.qtyET).text.toString()
-                val ingredient = view.findViewById<EditText>(R.id.bioET).text.toString()
-                val measurement = view.findViewById<EditText>(R.id.measurementET).text.toString()
-                ingredients.add(Ingredient(Integer.parseInt(qty),ingredient, measurement))
-            }
-
-            procedureLayout.forEach { view ->
-                val procedure = view.findViewById<EditText>(R.id.qtyET).text.toString()
-                procedures.add(procedure)
-            }
-
-            CoroutineScope(Dispatchers.IO).launch{
-                if(imageUri == null){
-                    recipeImg = FirestoreReferences.getDefaultAvatar().await()
-                }else{
-                    recipeImg = FirestoreReferences.getRecipePhotoUri(imageUri!!, uid)
+                ingredientLayout.forEach { view ->
+                    val qty = view.findViewById<EditText>(R.id.qtyET).text.toString()
+                    val ingredient = view.findViewById<EditText>(R.id.bioET).text.toString()
+                    val measurement = view.findViewById<EditText>(R.id.measurementET).text.toString()
+                    ingredients.add(Ingredient(Integer.parseInt(qty),ingredient, measurement))
                 }
 
-                Log.d(TAG, recipeName)
-                Log.d(TAG, numServings)
-                Log.d(TAG, prepTime)
-                Log.d(TAG, recipeImg.toString())
-                Log.d(TAG, ingredients.toString())
-                Log.d(TAG, procedures.toString())
-
-
-                val newRecipe = Recipe(recipeName, uid, username,
-                    ArrayList(),ArrayList(),numServings,
-                    Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(), classification)
-
-                FirestoreReferences.addRecipe(newRecipe)
-
-                withContext(Dispatchers.Main){
-                    Toast.makeText(this@CreateRecipeActivity, "Recipe Created", Toast.LENGTH_LONG).show()
-                    finish()
+                procedureLayout.forEach { view ->
+                    val procedure = view.findViewById<EditText>(R.id.procedureET).text.toString()
+                    procedures.add(procedure)
                 }
+
+                CoroutineScope(Dispatchers.IO).launch{
+                    if(imageUri == null){
+                        recipeImg = FirestoreReferences.getDefaultAvatar().await()
+                    }else{
+                        recipeImg = FirestoreReferences.getRecipePhotoUri(imageUri!!, uid)
+                    }
+
+                    Log.d(TAG, recipeName)
+                    Log.d(TAG, numServings)
+                    Log.d(TAG, prepTime)
+                    Log.d(TAG, recipeImg.toString())
+                    Log.d(TAG, ingredients.toString())
+                    Log.d(TAG, procedures.toString())
+
+                    val newRecipe = Recipe(recipeName, uid, username,
+                        ArrayList(),ArrayList(),numServings,
+                        Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(), classification)
+
+                    FirestoreReferences.addRecipe(newRecipe)
+
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(this@CreateRecipeActivity, "Recipe Created", Toast.LENGTH_LONG).show()
+                        finish()
+                    }
+                }
+            }else{
+                Toast.makeText(this,"Please fill up all the fields", Toast.LENGTH_LONG).show()
             }
         }
 
         backBtn.setOnClickListener {
             finish()
         }
+    }
+
+    private fun checkFields() : Boolean{
+        val servingsETEmpty = numServingsET.text.isEmpty()
+        val totTimeETEmpty = totalTimeET.text.isEmpty()
+        val recipeNameETEmpty = recipeNameET.text.isEmpty()
+        val ingredientEmpty = checkIngredients()
+        val procedureEmpty = checkProcedure()
+
+        Log.d("CHECK_FIELDS", "servings: $servingsETEmpty")
+        Log.d("CHECK_FIELDS", "total time: $totTimeETEmpty")
+        Log.d("CHECK_FIELDS", "recipename: $recipeNameETEmpty")
+        Log.d("CHECK_FIELDS", "ingredients: $ingredientEmpty")
+        Log.d("CHECK_FIELDS", "procedure $procedureEmpty")
+
+        val isEmpty = servingsETEmpty || totTimeETEmpty || recipeNameETEmpty || ingredientEmpty|| procedureEmpty
+
+        Log.d("CHECK_FIELDS", "isEmpty: $isEmpty")
+
+        return isEmpty
+    }
+
+    private fun checkIngredients() : Boolean{
+        var notFilled = false
+        ingredientLayout.forEach { view ->
+            val qtyETEmpty = view.findViewById<EditText>(R.id.qtyET).text.isEmpty()
+            val measurementETEmpty = view.findViewById<EditText>(R.id.measurementET).text.isEmpty()
+            val ingredientETEmpty = view.findViewById<EditText>(R.id.bioET).text.isEmpty()
+
+            if(qtyETEmpty || measurementETEmpty || ingredientETEmpty){
+                notFilled = true
+            }
+        }
+        return notFilled
+    }
+
+    private fun checkProcedure() : Boolean{
+        var notFilled = false
+        procedureLayout.forEach { view ->
+            val procedureETEmpty = view.findViewById<EditText>(R.id.procedureET).text.isEmpty()
+            if(procedureETEmpty){
+                notFilled = true
+            }
+        }
+        return notFilled
     }
 }
