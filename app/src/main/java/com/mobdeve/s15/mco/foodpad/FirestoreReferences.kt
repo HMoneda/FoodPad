@@ -40,7 +40,8 @@ class FirestoreReferences {
         const val RECIPE_NAME_FIELD = "recipeName"
         const val RECIPE_AUTHOR_FIELD = "author"
         const val NUM_COMMENTS_FIELD = "comments"
-        const val NUM_LIKES_FIELD = "likes"
+        const val LIKES_FIELD = "likes"
+        const val NUM_LIKES_FIELD = "numLikes"
         const val USER_FIELD = "userID"
         const val RECIPE_CLASSIFICATION_FIELD = "classification"
         const val COMMENT_RECIPE_ID_FIELD = "recipeID"
@@ -156,7 +157,8 @@ class FirestoreReferences {
         }
 
         fun likeRecipe(recipeID: String, likes : ArrayList<String>){
-            getRecipeCollectionReference().document(recipeID).update(NUM_LIKES_FIELD, likes)
+            getRecipeCollectionReference().document(recipeID).update(LIKES_FIELD, likes)
+            getRecipeCollectionReference().document(recipeID).update(NUM_LIKES_FIELD, likes.size)
         }
 
         fun getPopularRecipesQuery() : Query{

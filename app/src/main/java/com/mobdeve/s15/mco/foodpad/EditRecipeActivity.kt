@@ -219,12 +219,13 @@ class EditRecipeActivity : AppCompatActivity() {
                     Log.d(TAG, ingredients.toString())
                     Log.d(TAG, procedures.toString())
 
-
+                    val oldRecipe = FirestoreReferences.getRecipe(recipeID!!).await().toObject(Recipe::class.java)
                     val updatedRecipe = Recipe(recipeName, uid!!, username!!,
-                        ArrayList(),numServings,
-                        Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(),classification)
+                        oldRecipe!!.likes,numServings,
+                        Integer.parseInt(prepTime),ingredients,procedures,recipeImg.toString(),classification,
+                        oldRecipe.likes.size)
 
-                    FirestoreReferences.updateRecipe(recipeID!!, updatedRecipe)
+                    FirestoreReferences.updateRecipe(recipeID, updatedRecipe)
 
                     withContext(Dispatchers.Main){
                         Toast.makeText(this@EditRecipeActivity, "Recipe Updated", Toast.LENGTH_LONG).show()
