@@ -24,4 +24,3 @@ FoodPad is a recipe sharing app that allows users to create and share their reci
 | Edit Profile | The user can edit their password and bio. |
 | Search User | The user can search other users based on their name. |
 | Follow/Unfollow | The user can follow/unfollow other users they like/dislike. |
-|
